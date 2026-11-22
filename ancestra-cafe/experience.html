@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewards &amp; Guest Reviews | Ancestra Cafe</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet"></head>
+<body data-page="experience"><div id="site-header"></div>
+<header class="page-hero"><div class="container"><p class="eyebrow">A little something extra</p><h1>Rewards &amp; Reviews</h1><p class="lead mb-0">Your café experience, in one place.</p></div></header>
+<main>
+    <!-- Added feature: digital loyalty card, modeled on the published 9-stamp reward terms -->
+    <section class="section-pad bg-sky" id="rewards"><div class="container">
+      <div class="text-center mb-5"><p class="eyebrow">Ancestra Cafe rewards</p><h2 class="section-title">Ancestra Cafe Rewards Program</h2>
+        <p class="mb-0">The published loyalty terms state that a coffee reward is available after 9 stamps. This digital card is a student-project demonstration of that program.</p></div>
+      <div class="row g-4 align-items-start">
+        <div class="col-lg-6">
+          <div id="cardJoined" class="loyalty-card d-none"><div class="d-flex justify-content-between align-items-start mb-3"><div><div class="small text-uppercase opacity-75">Ancestra digital demo card</div><div class="display-font fs-2" id="memberName"></div></div><div class="text-end"><div class="small opacity-75">Stamps</div><div class="display-font fs-2" id="stampCount">0</div></div></div>
+            <div class="stamp-grid mb-3" id="stampGrid" aria-label="Nine stamp progress"></div><div class="progress mb-2" style="height:8px"><div class="progress-bar bg-light" id="stampBar" style="width:0%"></div></div><p class="small mb-3" id="rewardText"></p><button class="btn btn-cream" id="redeemBtn" type="button" disabled>Redeem free drink (demo)</button></div>
+          <form id="joinForm" class="card-soft p-4 needs-validation" novalidate><h3 class="h3">Create a digital demo card</h3><p class="text-muted-2">The café’s published terms award one stamp per drink. This form stores a demonstration card in this browser only.</p>
+            <div class="mb-3"><label for="mName" class="form-label">Name</label><input id="mName" class="form-control" required minlength="2"><div class="invalid-feedback">Please enter your name.</div></div>
+            <div class="mb-3"><label for="mPhone" class="form-label">Mobile number</label><input id="mPhone" class="form-control" required pattern="^(\+?63|0)9\d{9}$" placeholder="09XXXXXXXXX"><div class="invalid-feedback">Enter a valid PH mobile number.</div></div>
+            <button class="btn btn-blue" type="submit">Create demo card</button></form>
+          <div class="card-soft p-3 mt-3"><h3 class="h6">Staff stamp simulation</h3><div class="input-group input-group-sm"><input id="staffCode" class="form-control" placeholder="Demo staff code: STAFF" aria-label="Demo staff code"><button class="btn btn-outline-blue" id="staffStampBtn" type="button">Add stamp</button></div></div>
+          <p class="small text-muted-2 mt-3">Official terms: 9 stamps qualify for one menu drink without add-ons; one stamp is given per drink. Rewards are subject to availability and cannot be combined with other offers. See the <a href="blog.html#rewards-post">published terms</a>.</p>
+        </div>
+        <div class="col-lg-6" id="vouchers"><h3 class="h3 mb-3">Promo voucher demo</h3><p class="small text-muted-2">The following codes are created only for this school-project demonstration. They are not official Ancestra Cafe promotions.</p>
+          <div class="row row-cols-1 g-3" id="voucherGrid"></div>
+          <div class="card-soft p-3 mt-3"><label for="redeemCode" class="form-label mb-1">Claim a project demo code</label><div class="input-group"><input id="redeemCode" class="form-control" placeholder="e.g. PROJECT10"><button class="btn btn-blue" id="redeemCodeBtn" type="button">Claim</button></div><p class="small text-muted-2 mt-2 mb-0">Claimed demo codes can be applied in the project cart.</p></div>
+        </div>
+      </div>
+    </div></section>
+
+    <!-- Added feature: user-submitted reviews; no fabricated testimonials are preloaded -->
+    <section class="section-pad" id="reviews"><div class="container"><div class="text-center mb-5"><p class="eyebrow">Guest feedback</p><h2 class="section-title">Customer Reviews</h2><p class="small text-muted-2">Reviews submitted here are stored locally for this class-project demo and are not verified or published by Ancestra Cafe.</p></div>
+      <div class="row g-4"><div class="col-lg-4"><div class="card-soft p-4 mb-4 text-center"><div class="stat-num" id="avgRating">0.0</div><div class="stars fs-4" id="avgStars"></div><p class="small text-muted-2 mb-3" id="reviewTotal"></p><div id="ratingBars" class="text-start small"></div></div>
+        <form id="reviewForm" class="card-soft p-4" novalidate><h3 class="h4">Write a review</h3><div class="mb-3"><label class="form-label d-block">Your rating</label><div class="star-input" role="radiogroup" aria-label="Star rating"><input type="radio" name="rating" id="s5" value="5"><label for="s5">★</label><input type="radio" name="rating" id="s4" value="4"><label for="s4">★</label><input type="radio" name="rating" id="s3" value="3"><label for="s3">★</label><input type="radio" name="rating" id="s2" value="2"><label for="s2">★</label><input type="radio" name="rating" id="s1" value="1"><label for="s1">★</label></div><div class="text-danger small d-none" id="ratingError">Please pick a rating.</div></div>
+          <div class="mb-3"><label for="vName" class="form-label">Name</label><input id="vName" class="form-control" required minlength="2"></div><div class="mb-3"><label for="vDish" class="form-label">Menu item (optional)</label><select id="vDish" class="form-select"><option value="">General experience</option></select></div><div class="mb-3"><label for="vText" class="form-label">Your feedback</label><textarea id="vText" class="form-control" rows="4" required minlength="10"></textarea></div><button class="btn btn-blue" type="submit">Submit demo review</button></form></div>
+        <div class="col-lg-8"><div class="d-flex justify-content-between align-items-center mb-3"><h3 class="h4 mb-0">Submitted feedback</h3><select id="reviewFilter" class="form-select form-select-sm" style="max-width:150px"><option value="0">All ratings</option><option value="5">5 stars</option><option value="4">4 stars</option><option value="3">3 stars</option><option value="2">2 stars</option><option value="1">1 star</option></select></div><div id="reviewList"></div></div>
+      </div></div></section>
+
+</main><div id="site-footer"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script><script src="js/cart.js"></script><script src="js/loyalty.js"></script><script src="js/reviews-data.js"></script><script src="js/reviews.js"></script>
+</body></html>
