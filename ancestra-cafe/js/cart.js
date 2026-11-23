@@ -66,25 +66,40 @@ function cartMarkup() {
 }
 
 const Cart = {
-  items() { return Store.get("cart", []); },
-  save(items) { Store.set("cart", items); this.render(); },
-  count() { return this.items().reduce((n, i) => n + i.qty, 0); },
+  items() {
+    return Store.get("cart", []);
+  },
+  save(items) {
+    Store.set("cart", items);
+    this.render();
+  },
+  count() {
+    return this.items().reduce((n, i) => n + i.qty, 0);
+  },
 
   add(item) {
     const items = this.items();
-    const found = items.find(i => i.id === item.id);
-    if (found) found.qty += 1; else items.push({ ...item, qty: 1 });
+    const found = items.find((i) => i.id === item.id);
+    if (found) found.qty += 1;
+    else items.push({ ...item, qty: 1 });
     this.save(items);
     toast(`${item.name} added to your order`);
   },
   setQty(id, qty) {
     let items = this.items();
-    items = items.map(i => i.id === id ? { ...i, qty } : i).filter(i => i.qty > 0);
+    items = items
+      .map((i) => (i.id === id ? { ...i, qty } : i))
+      .filter((i) => i.qty > 0);
     this.save(items);
   },
-  clear() { Store.set("appliedVoucher", null); this.save([]); },
+  clear() {
+    Store.set("appliedVoucher", null);
+    this.save([]);
+  },
 
-  subtotal() { return this.items().reduce((s, i) => s + i.price * i.qty, 0); },
+  subtotal() {
+    return this.items().reduce((s, i) => s + i.price * i.qty, 0);
+  },
 
   /* returns {discount, message, ok} for the currently applied voucher */
   discountInfo() {
@@ -94,31 +109,77 @@ const Cart = {
     const sub = this.subtotal();
     if (!v) return { discount: 0 };
     if (v.reward) {
-      const drinks = this.items().filter(i => i.group === "drink");
-      if (!drinks.length) return { discount: 0, message: "Add a menu drink to your demo cart to use the 9-stamp reward.", ok: false };
-      const freeDrink = drinks.reduce((best, item) => item.price > best.price ? item : best, drinks[0]);
-      return { discount: freeDrink.price, message: `One ${freeDrink.name} reward applied (demo).`, ok: true, voucher: v };
+      const drinks = this.items().filter((i) => i.group === "drink");
+      if (!drinks.length)
+        return {
+          discount: 0,
+          message:
+            "Add a menu drink to your demo cart to use the 9-stamp reward.",
+          ok: false,
+        };
+      const freeDrink = drinks.reduce(
+        (best, item) => (item.price > best.price ? item : best),
+        drinks[0],
+      );
+      return {
+        discount: freeDrink.price,
+        message: `One ${freeDrink.name} reward applied (demo).`,
+        ok: true,
+        voucher: v,
+      };
     }
-    if (sub < v.min) return { discount: 0, message: `Spend ${Peso(v.min)} or more to use ${v.code}.`, ok: false };
-    const discount = v.type === "pct" ? Math.round(sub * v.value) / 100 : Math.min(v.value, sub);
-    return { discount, message: `${v.code} applied – ${v.desc}.`, ok: true, voucher: v };
+    if (sub < v.min)
+      return {
+        discount: 0,
+        message: `Spend ${Peso(v.min)} or more to use ${v.code}.`,
+        ok: false,
+      };
+    const discount =
+      v.type === "pct"
+        ? Math.round(sub * v.value) / 100
+        : Math.min(v.value, sub);
+    return {
+      discount,
+      message: `${v.code} applied – ${v.desc}.`,
+      ok: true,
+      voucher: v,
+    };
   },
-  total() { return Math.max(0, this.subtotal() - this.discountInfo().discount); },
+  total() {
+    return Math.max(0, this.subtotal() - this.discountInfo().discount);
+  },
 
   applyVoucher(code) {
     const v = findVoucher(code);
     const msg = document.getElementById("voucherMsg");
-    if (!v) { msg.className = "small text-danger"; msg.textContent = "That code isn't valid."; return; }
-    const used = Store.get("usedVouchers", []);
-    if (used.includes(v.code)) { msg.className = "small text-danger"; msg.textContent = "You've already used this voucher."; return; }
-    if (v.reward && !Store.get("claimedVouchers", []).includes(v.code)) {
-      msg.className = "small text-danger"; msg.textContent = "Unlock the 9-stamp demo loyalty reward on the homepage first."; return;
+    if (!v) {
+      msg.className = "small text-danger";
+      msg.textContent = "That code isn't valid.";
+      return;
     }
-    if (v.reward && !this.items().some(i => i.group === "drink")) {
-      msg.className = "small text-danger"; msg.textContent = "Add a menu drink to your cart before applying this reward."; return;
+    const used = Store.get("usedVouchers", []);
+    if (used.includes(v.code)) {
+      msg.className = "small text-danger";
+      msg.textContent = "You've already used this voucher.";
+      return;
+    }
+    if (v.reward && !Store.get("claimedVouchers", []).includes(v.code)) {
+      msg.className = "small text-danger";
+      msg.textContent =
+        "Unlock the 9-stamp demo loyalty reward on the homepage first.";
+      return;
+    }
+    if (v.reward && !this.items().some((i) => i.group === "drink")) {
+      msg.className = "small text-danger";
+      msg.textContent =
+        "Add a menu drink to your cart before applying this reward.";
+      return;
     }
     const claimed = Store.get("claimedVouchers", []);
-    if (!claimed.includes(v.code)) { claimed.push(v.code); Store.set("claimedVouchers", claimed); }
+    if (!claimed.includes(v.code)) {
+      claimed.push(v.code);
+      Store.set("claimedVouchers", claimed);
+    }
     Store.set("appliedVoucher", v.code);
     this.render();
   },
@@ -128,24 +189,33 @@ const Cart = {
       const val = document.getElementById("voucherInput").value;
       if (val.trim()) this.applyVoucher(val);
     });
-    document.getElementById("clearCartBtn").addEventListener("click", () => this.clear());
+    document
+      .getElementById("clearCartBtn")
+      .addEventListener("click", () => this.clear());
     document.getElementById("checkoutBtn").addEventListener("click", () => {
-      if (!this.count()) { toast("Your cart is empty.", "warning"); return; }
+      if (!this.count()) {
+        toast("Your cart is empty.", "warning");
+        return;
+      }
       const member = Store.get("member", null);
       if (member) document.getElementById("coName").value = member.name;
       document.getElementById("coTotal").textContent = Peso(this.total());
-      bootstrap.Offcanvas.getInstance(document.getElementById("cartCanvas"))?.hide();
+      bootstrap.Offcanvas.getInstance(
+        document.getElementById("cartCanvas"),
+      )?.hide();
       new bootstrap.Modal(document.getElementById("checkoutModal")).show();
     });
-    document.getElementById("cartItems").addEventListener("click", e => {
+    document.getElementById("cartItems").addEventListener("click", (e) => {
       const btn = e.target.closest("[data-act]");
       if (!btn) return;
       const id = btn.dataset.id;
-      const item = this.items().find(i => i.id === id);
+      const item = this.items().find((i) => i.id === id);
       if (!item) return;
       this.setQty(id, btn.dataset.act === "plus" ? item.qty + 1 : item.qty - 1);
     });
-    document.getElementById("checkoutForm").addEventListener("submit", e => this.checkout(e));
+    document
+      .getElementById("checkoutForm")
+      .addEventListener("submit", (e) => this.checkout(e));
     this.render();
   },
 
@@ -156,7 +226,10 @@ const Cart = {
     const list = document.getElementById("cartItems");
     if (!list) return;
 
-    list.innerHTML = items.length ? items.map(i => `
+    list.innerHTML = items.length
+      ? items
+          .map(
+            (i) => `
       <div class="cart-line d-flex align-items-center gap-2">
         <div class="fs-3" aria-hidden="true">${i.emoji}</div>
         <div class="flex-grow-1"><div class="fw-semibold">${escapeHtml(i.name)}</div>
@@ -167,20 +240,30 @@ const Cart = {
           <button class="btn btn-outline-secondary qty-btn" data-act="plus" data-id="${i.id}" aria-label="Increase quantity">+</button>
         </div>
         <div class="text-end" style="min-width:64px">${Peso(i.price * i.qty)}</div>
-      </div>`).join("")
+      </div>`,
+          )
+          .join("")
       : `<div class="text-center text-muted-2 py-5"><i class="bi bi-cup-hot display-4"></i><p class="mt-2">Your cart is empty.<br><a href="menu.html">Browse the menu</a></p></div>`;
 
     // voucher suggestions = claimed & unused
     const used = Store.get("usedVouchers", []);
-    document.getElementById("voucherList").innerHTML = Store.get("claimedVouchers", [])
-      .filter(c => !used.includes(c)).map(c => `<option value="${c}">`).join("");
+    document.getElementById("voucherList").innerHTML = Store.get(
+      "claimedVouchers",
+      [],
+    )
+      .filter((c) => !used.includes(c))
+      .map((c) => `<option value="${c}">`)
+      .join("");
 
     const info = this.discountInfo();
     const msg = document.getElementById("voucherMsg");
-    if (info.message) { msg.className = "small " + (info.ok ? "text-success" : "text-danger"); msg.textContent = info.message; }
-    else msg.textContent = "";
+    if (info.message) {
+      msg.className = "small " + (info.ok ? "text-success" : "text-danger");
+      msg.textContent = info.message;
+    } else msg.textContent = "";
     document.getElementById("cartSubtotal").textContent = Peso(this.subtotal());
-    document.getElementById("cartDiscount").textContent = "-" + Peso(info.discount || 0);
+    document.getElementById("cartDiscount").textContent =
+      "-" + Peso(info.discount || 0);
     document.getElementById("cartTotal").textContent = Peso(this.total());
     document.getElementById("checkoutBtn").disabled = !items.length;
   },
@@ -188,43 +271,63 @@ const Cart = {
   checkout(e) {
     e.preventDefault();
     const form = e.target;
-    if (!form.checkValidity()) { form.classList.add("was-validated"); return; }
+    if (!form.checkValidity()) {
+      form.classList.add("was-validated");
+      return;
+    }
     const info = this.discountInfo();
     const order = {
       id: uid("ORD"),
       name: document.getElementById("coName").value.trim(),
       type: document.getElementById("coType").value,
       note: document.getElementById("coNote").value.trim(),
-      items: this.items().map(i => ({ name: i.name, qty: i.qty, price: i.price, group: i.group })),
+      items: this.items().map((i) => ({
+        name: i.name,
+        qty: i.qty,
+        price: i.price,
+        group: i.group,
+      })),
       subtotal: this.subtotal(),
       discount: info.discount || 0,
       voucher: info.ok ? info.voucher.code : null,
       total: this.total(),
       status: "Pending",
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
     };
     const orders = Store.get("orders", []);
     orders.unshift(order);
     Store.set("orders", orders);
 
     if (order.voucher) {
-      const used = Store.get("usedVouchers", []); used.push(order.voucher); Store.set("usedVouchers", used);
-      Store.set("claimedVouchers", Store.get("claimedVouchers", []).filter(c => c !== order.voucher));
+      const used = Store.get("usedVouchers", []);
+      used.push(order.voucher);
+      Store.set("usedVouchers", used);
+      Store.set(
+        "claimedVouchers",
+        Store.get("claimedVouchers", []).filter((c) => c !== order.voucher),
+      );
     }
-    let stampMsg = "This is a student-project demo order and is not sent to Ancestra Cafe.";
+    let stampMsg =
+      "This is a student-project demo order and is not sent to Ancestra Cafe.";
     const member = Store.get("member", null);
-    const drinkCount = order.items.filter(i => i.group === "drink").reduce((sum, i) => sum + i.qty, 0);
+    const drinkCount = order.items
+      .filter((i) => i.group === "drink")
+      .reduce((sum, i) => sum + i.qty, 0);
     if (member && drinkCount > 0) {
-      member.stamps += drinkCount; Store.set("member", member);
+      member.stamps += drinkCount;
+      Store.set("member", member);
       stampMsg += ` Demo loyalty progress: ${drinkCount} drink stamp(s) added (${member.stamps} total).`;
     }
     Store.set("appliedVoucher", null);
     this.save([]);
-    form.classList.remove("was-validated"); form.reset();
-    bootstrap.Modal.getInstance(document.getElementById("checkoutModal")).hide();
+    form.classList.remove("was-validated");
+    form.reset();
+    bootstrap.Modal.getInstance(
+      document.getElementById("checkoutModal"),
+    ).hide();
     document.getElementById("orderNo").textContent = order.id;
     document.getElementById("orderDoneMsg").textContent = stampMsg;
     new bootstrap.Modal(document.getElementById("orderDoneModal")).show();
     if (typeof window.onOrderPlaced === "function") window.onOrderPlaced();
-  }
+  },
 };

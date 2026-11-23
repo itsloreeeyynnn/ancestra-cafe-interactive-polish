@@ -16,7 +16,7 @@ This is the uploaded café project updated with Ancestra Cafe business content a
 | `index.html` | Ancestra homepage content, official menu-board previews, digital loyalty demo, project vouchers, customer review feature |
 | `about.html` | Published About Us copy and Ancestra name story |
 | `menu.html` | Published menu data, search, category filters, favorites, sorting, demo cart and checkout |
-| `blog.html` | Published blog stories and guest policies |
+| `blog.html` | Published blog stories and guest policies as flip cards; “Show more” turns the card around and the open card is shared through the `?post=` link |
 | `contact.html` | Published contact details and location map; reservation form clearly marked as a demo because official policy says no table reservations |
 | `admin.html` | Front-end demo admin dashboard |
 
@@ -36,8 +36,8 @@ Extract the ZIP, open this folder in VS Code, and use Live Server to open `index
 ## Important limitations
 This is an academic front-end project and is not an official Ancestra Cafe website or service. Reservations, orders, vouchers, reviews, loyalty card and admin data are browser-based demonstrations only. No information is sent to the café. Prices and menu availability may change; verify with Ancestra Cafe before visiting.
 
-## Hero reference image note
-The exterior house image used in the hero is a cropped still from the screen recording supplied for this project, because the live site's moving hero media file was not exposed in the accessible page content. It is included locally so the project works consistently. Its resolution is limited by the recording; replace `images/ancestra-house-hero.jpg` with the original licensed high-resolution hero video or image if the café supplies it. The staged heading and slow background drift recreate the visible motion, but are not the original source video.
+## Hero video note
+The hero background plays the supplied café recording `videos/squarespace-cdn.mp4` as a muted, looping, inline video (autoplay is skipped and the video is hidden for readers who prefer reduced motion). `images/ancestra-house-hero.jpg` — a cropped still from the same recording — is kept as the video's poster and as the static fallback, so the hero still looks right before the video loads, if it cannot play, or when motion is reduced. The recording's resolution is limited; replace `videos/squarespace-cdn.mp4` with the original licensed high-resolution hero video if the café supplies it.
 
 ## UI/UX enhancement pass
 This pass preserves the existing Ancestra-inspired palette, typography, centered wordmark navigation, section order, and original content while adding small usability refinements:
@@ -47,6 +47,8 @@ This pass preserves the existing Ancestra-inspired palette, typography, centered
 - mobile navigation closes after a page is selected;
 - accessible photo/menu-board preview with keyboard support and Escape-to-close;
 - `/` keyboard shortcut to focus menu search (Escape returns focus to the page);
+- the home hero plays the supplied café video as a muted looping background, falling back to the still image for reduced-motion readers;
+- blog cards flip between the cover/teaser and the full post (“Show more”/“Show less”, one card at a time), and the open card is carried in the page URL as `?post=…` so a copied or revisited link reopens it (`js/blog.js`, no browser storage);
 - reduced-motion preferences continue to be respected.
 
 The added interactions are front-end only. Existing cart, loyalty, voucher, review, reservation-demo, and admin behavior remains unchanged. Reservation and ordering demos are not connected to Ancestra Cafe systems and do not create real bookings or payments.

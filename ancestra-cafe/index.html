@@ -1,111 +1,262 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ancestra Cafe | A Coffee Shop for Community</title>
-  <meta name="description" content="Ancestra Cafe in Argao, Cebu — where heritage is celebrated through local flavors, family recipes, and coffee.">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
-</head>
-<body data-page="home">
-  <div id="site-header"></div>
-  <header class="hero" aria-label="Welcome to Ancestra Cafe">
-    <div class="hero-content container">
-      <h1 class="hero-title"><span>WELCOME TO</span><span>ANCESTRA</span></h1>
-      <div class="hero-cafe-mark"><span>✿</span> CAFE <span>✿</span></div>
-      <p class="tagline">A coffee shop for community, where<br class="d-none d-sm-block"> heritage is celebrated</p>
-      <a href="#menu-preview" class="hero-cta">EXPLORE OUR MENU BELOW</a>
-    </div>
-  </header>
-  <main>
-    <section class="section-pad" id="story">
-      <div class="container"><div class="row align-items-center g-5">
-        <div class="col-lg-6">
-          <p class="eyebrow">Rooted in the heart of Argao</p>
-          <h2 class="section-title">The Heart of Argao</h2>
-          <p>Ancestra Café brings together local flavors, family recipes, and community stories in a heritage home in the heart of Argao. Come for the food, stay for the feeling of home.</p>
-          <a href="about.html" class="btn btn-outline-blue">More about Ancestra Cafe</a>
-        </div>
-        <div class="col-lg-6">
-          <div class="story-photo-row">
-            <div class="story-photo story-photo-a"><img src="https://images.squarespace-cdn.com/content/v1/67a2a8606844a1403f9d8ca4/f281ba41-9ee0-4a73-a841-062bfab2c8f8/DSCF1548-2.jpg" alt="Freshly baked croissants and pastries at Ancestra Cafe"></div>
-            <div class="story-photo story-photo-b"><img src="https://images.squarespace-cdn.com/content/v1/67a2a8606844a1403f9d8ca4/f1a7c862-056a-4633-b0ab-151ec681bb83/DSCF1074.jpg" alt="Heritage dining table inside Ancestra Cafe"></div>
-            <div class="story-photo story-photo-c"><img src="https://images.squarespace-cdn.com/content/v1/67a2a8606844a1403f9d8ca4/cbd8fc98-7d62-414f-a5bc-150d1145529c/DSCF1491.jpg" alt="Ancestra Cafe coffee cup and printed menu"></div>
-          </div>
-        </div>
-      </div></div>
-    </section>
-
-    <section class="craving-finder" aria-labelledby="craving-title">
-      <div class="container">
-        <div class="craving-intro">
-          <p class="eyebrow">A little something for every mood</p>
-          <h2 id="craving-title">What are you in the mood for?</h2>
-        </div>
-        <div class="craving-options">
-          <a class="craving-option" href="menu.html?cat=Coffee">
-            <span class="craving-icon" aria-hidden="true"><i class="bi bi-cup-hot"></i></span>
-            <span class="craving-name">Coffee</span>
-            <span class="craving-arrow" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
-          </a>
-          <a class="craving-option" href="menu.html?cat=Ice%20Blended">
-            <span class="craving-icon" aria-hidden="true"><i class="bi bi-snow"></i></span>
-            <span class="craving-name">Something chilled</span>
-            <span class="craving-arrow" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
-          </a>
-          <a class="craving-option" href="menu.html?cat=Pasta">
-            <span class="craving-icon" aria-hidden="true"><i class="bi bi-egg-fried"></i></span>
-            <span class="craving-name">A proper meal</span>
-            <span class="craving-arrow" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
-          </a>
-        </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ancestra Cafe | A Coffee Shop for Community</title>
+    <meta
+      name="description"
+      content="Ancestra Cafe in Argao, Cebu — where heritage is celebrated through local flavors, family recipes, and coffee."
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700;900&family=Rhodium+Libre:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body data-page="home">
+    <div id="site-header"></div>
+    <header class="hero" aria-label="Welcome to Ancestra Cafe">
+      <video
+        class="hero-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="images/ancestra-house-hero.jpg"
+        aria-hidden="true"
+        tabindex="-1"
+      >
+        <source src="videos/squarespace-cdn.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-content container">
+        <img
+          class="hero-logo"
+          src="images/Lettermark+02.png"
+          alt="Ancestra Cafe"
+        />
+        <h1 class="hero-title"><span>Welcome to</span></h1>
+        <p class="tagline">
+          A coffee shop for community, where<br class="d-none d-sm-block" />
+          heritage is celebrated
+        </p>
+        <a href="#menu-preview" class="hero-cta">EXPLORE OUR MENU BELOW</a>
       </div>
-    </section>
-
-    <section class="menu-showcase" id="menu-preview">
-      <div class="menu-showcase-bg" aria-hidden="true"></div>
-      <div class="container-fluid px-lg-5 position-relative">
-        <div class="row align-items-center g-4">
-          <div class="col-lg-3 menu-heading-col"><h2 class="menu-heading">MENU</h2><span class="menu-heading-rule"></span></div>
-          <div class="col-6 col-lg-4"><a class="menu-board-link" href="menu.html" aria-label="View coffee and drinks menu"><img class="menu-board" src="https://images.squarespace-cdn.com/content/v1/67a2a8606844a1403f9d8ca4/909445af-7ad3-4b11-8861-740885ace48c/2.jpg" alt="Official Ancestra Cafe coffee, non-coffee and ice blended menu board"></a></div>
-          <div class="col-6 col-lg-4"><a class="menu-board-link" href="menu.html" aria-label="View food menu"><img class="menu-board" src="https://images.squarespace-cdn.com/content/v1/67a2a8606844a1403f9d8ca4/fb0afee6-86d9-4c52-af3e-d8c494c793b0/3.jpg" alt="Official Ancestra Cafe sandwiches, small plates, pasta, salad, mains and sides menu board"></a></div>
-        </div>
-      </div>
-    </section>
-    <section class="section-pad" id="space">
-      <div class="container"><div class="row g-5 align-items-center">
-        <div class="col-lg-5 order-lg-1"><p class="eyebrow">Where stories are shared</p><h2 class="section-title">Where stories are shared</h2>
-          <p>A heritage home filled with local materials, vintage details, and cozy corners — a place to slow down, share a meal, and feel at home.</p>
-        </div>
-        <div class="col-lg-7 order-lg-2"><div class="row g-3">
-          <div class="col-4"><div class="photo photo-square"><img class="img-cover" src="https://images.squarespace-cdn.com/content/v1/67a2a8606844a1403f9d8ca4/f1a7c862-056a-4633-b0ab-151ec681bb83/DSCF1074.jpg" alt="Heritage dining nook at Ancestra Cafe"></div></div>
-          <div class="col-4"><div class="photo photo-square"><img class="img-cover" src="https://images.squarespace-cdn.com/content/v1/67a2a8606844a1403f9d8ca4/f10a58ea-e797-4103-8c39-69c6f49172d3/DSCF1081.jpg" alt="Ancestra Cafe coffee bar and interior"></div></div>
-          <div class="col-4"><div class="photo photo-square"><img class="img-cover" src="https://images.squarespace-cdn.com/content/v1/67a2a8606844a1403f9d8ca4/1745478587362-8OWVU6J7YXK2QTNNU2LL/DSCF8706.jpg" alt="Traditional weaving in Argao"></div></div>
-        </div></div>
-      </div></div>
-    </section>
-
-    <section class="home-location" id="home-location">
-      <div class="container">
-        <div class="row align-items-center g-5">
-          <div class="col-lg-5">
-            <p class="location-eyebrow">WELCOME TO ARGAO</p>
-            <h2>WHETHER YOU’RE<br>FROM ARGAO OR JUST<br>PASSING THROUGH,<br>YOU’RE ALWAYS<br>WELCOME HERE.</h2>
-            <p>Find us in the heart of town, where the coffee’s warm and the stories are even warmer.</p>
-            <a href="contact.html" class="location-link">VISIT ANCESTRA CAFE</a>
-          </div>
-          <div class="col-lg-7">
-            <div class="home-map-wrap">
-              <iframe title="Map showing Ancestra Cafe in Argao, Cebu" loading="lazy" src="https://maps.google.com/maps?q=Ancestra%20Cafe%2C%20311%20General%20Ortega%20St%2C%20Poblacion%2C%20Argao%2C%20Cebu&t=&z=17&ie=UTF8&iwloc=&output=embed"></iframe>
+    </header>
+    <main>
+      <section class="section-pad" id="story">
+        <div class="container">
+          <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+              <h2 class="section-title">Rooted in the heart of Argao</h2>
+              <p>
+                Ancestra Café is more than a place to dine; it’s a tribute to
+                heritage. Our café brings together classic local flavors, family
+                recipes, modern culinary techniques, and community stories,
+                serving as a gathering space where tradition meets taste.
+              </p>
+              <p>
+                From dishes inspired by Cebuano cooking and international cafe
+                classics to locally roasted coffee, every bite honors the
+                ancestry that inspires us. Come for the food, stay for the
+                feeling of home.
+              </p>
+              <a href="about.html" class="btn btn-outline-blue"
+                >More about Ancestra Cafe</a
+              >
+            </div>
+            <div class="col-lg-6">
+              <div class="story-photo-row">
+                <div class="story-photo story-photo-a">
+                  <img
+                    src="images/DSCF1548-2.jpg"
+                    alt="Freshly baked croissants and pastries at Ancestra Cafe"
+                  />
+                </div>
+                <div class="story-photo story-photo-b">
+                  <img
+                    src="images/DSCF1074.jpg"
+                    alt="Heritage dining table inside Ancestra Cafe"
+                  />
+                </div>
+                <div class="story-photo story-photo-c">
+                  <img
+                    src="images/DSCF1491.jpg"
+                    alt="Ancestra Cafe coffee cup and printed menu"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-  </main>
-  <div id="site-footer"></div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/main.js"></script><script src="js/cart.js"></script><script src="js/menu.js"></script><script src="js/home.js"></script>
-</body></html>
+      </section>
+
+      <section class="craving-finder" aria-labelledby="craving-title">
+        <div class="container">
+          <div class="craving-intro">
+            <p class="eyebrow">A little something for every mood</p>
+            <h2 id="craving-title">What are you in the mood for?</h2>
+          </div>
+          <div class="craving-options">
+            <a class="craving-option" href="menu.html?cat=Coffee">
+              <span class="craving-icon" aria-hidden="true"
+                ><i class="bi bi-cup-hot"></i
+              ></span>
+              <span class="craving-name">Coffee</span>
+              <span class="craving-arrow" aria-hidden="true"
+                ><i class="bi bi-arrow-up-right"></i
+              ></span>
+            </a>
+            <a class="craving-option" href="menu.html?cat=Ice%20Blended">
+              <span class="craving-icon" aria-hidden="true"
+                ><i class="bi bi-snow"></i
+              ></span>
+              <span class="craving-name">Something chilled</span>
+              <span class="craving-arrow" aria-hidden="true"
+                ><i class="bi bi-arrow-up-right"></i
+              ></span>
+            </a>
+            <a class="craving-option" href="menu.html?cat=Pasta">
+              <span class="craving-icon" aria-hidden="true"
+                ><i class="bi bi-egg-fried"></i
+              ></span>
+              <span class="craving-name">A proper meal</span>
+              <span class="craving-arrow" aria-hidden="true"
+                ><i class="bi bi-arrow-up-right"></i
+              ></span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="menu-showcase" id="menu-preview">
+        <div class="menu-showcase-bg" aria-hidden="true"></div>
+        <div class="container-fluid px-lg-5 position-relative">
+          <div class="row align-items-center g-4">
+            <div class="col-lg-3 menu-heading-col">
+              <h2 class="menu-heading">MENU</h2>
+              <span class="menu-heading-rule"></span>
+            </div>
+            <div class="col-6 col-lg-4">
+              <a
+                class="menu-board-link"
+                href="menu.html"
+                aria-label="View coffee and drinks menu"
+                ><img
+                  class="menu-board"
+                  src="images/2.jpg"
+                  alt="Official Ancestra Cafe coffee, non-coffee and ice blended menu board"
+              /></a>
+            </div>
+            <div class="col-6 col-lg-4">
+              <a
+                class="menu-board-link"
+                href="menu.html"
+                aria-label="View food menu"
+                ><img
+                  class="menu-board"
+                  src="images/3.jpg"
+                  alt="Official Ancestra Cafe sandwiches, small plates, pasta, salad, mains and sides menu board"
+              /></a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section-pad" id="space">
+        <div class="container">
+          <div class="row g-5 align-items-center">
+            <div class="col-lg-5 order-lg-1">
+              <h2 class="section-title">Where stories are shared</h2>
+              <p>
+                Step inside Ancestra Cafe and feel the comfort of a house
+                steeped in memory. Designed with heritage in mind, our space
+                blends local materials, vintage details, and cozy corners.
+              </p>
+              <p>
+                Ancestra Cafe stands with our local farmers, artisans, and
+                neighbors. Local produce is combined with international flavors
+                from the various cultures that have made up the history of Cebu.
+              </p>
+            </div>
+            <div class="col-lg-7 order-lg-2">
+              <div class="row g-3">
+                <div class="col-4">
+                  <div class="photo photo-square">
+                    <img
+                      class="img-cover"
+                      src="images/DSCF1074.jpg"
+                      alt="Heritage dining nook at Ancestra Cafe"
+                    />
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="photo photo-square">
+                    <img
+                      class="img-cover"
+                      src="images/DSCF1081.jpg"
+                      alt="Ancestra Cafe coffee bar and interior"
+                    />
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="photo photo-square">
+                    <img
+                      class="img-cover"
+                      src="images/DSCF1579.jpg"
+                      alt="Vintage sofa corner at Ancestra Cafe"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="home-location" id="home-location">
+        <div class="container">
+          <div class="row align-items-center g-5">
+            <div class="col-lg-5">
+              <p class="location-eyebrow">WELCOME TO ARGAO</p>
+              <h2>
+                WHETHER YOU’RE<br />FROM ARGAO OR JUST<br />PASSING THROUGH,<br />YOU’RE
+                ALWAYS<br />WELCOME HERE.
+              </h2>
+              <p>
+                Find us in the heart of town, where the coffee’s warm and the
+                stories are even warmer.
+              </p>
+              <a href="contact.html" class="location-link"
+                >VISIT ANCESTRA CAFE</a
+              >
+            </div>
+            <div class="col-lg-7">
+              <div class="home-map-wrap">
+                <iframe
+                  title="Map showing Ancestra Cafe in Argao, Cebu"
+                  loading="lazy"
+                  src="https://maps.google.com/maps?q=Ancestra%20Cafe%2C%20311%20General%20Ortega%20St%2C%20Poblacion%2C%20Argao%2C%20Cebu&t=&z=17&ie=UTF8&iwloc=&output=embed"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div id="site-footer"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/home.js"></script>
+  </body>
+</html>
