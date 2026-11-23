@@ -148,6 +148,8 @@ const NAV_LINKS = [
   ["blog.html", "Blog", "blog"],
   ["contact.html", "Contact", "contact"],
   ["experience.html", "Rewards", "experience"],
+  ["gallery.html", "Gallery", "gallery"],
+  ["faq.html", "FAQ & Reviews", "faq"],
 ];
 
 function renderChrome() {
@@ -199,7 +201,7 @@ function renderChrome() {
     footer.innerHTML = `<footer class="site-footer text-center"><div class="container">
       <img src="images/Lettermark+02.png" alt="Ancestra Cafe official wordmark" class="footer-wordmark mb-3">
       <p class="mb-3">A coffee shop for community, where heritage is celebrated.</p>
-      <ul class="list-inline footer-links mb-3"><li class="list-inline-item"><a href="about.html">About</a></li><li class="list-inline-item"><a href="menu.html">Menu</a></li><li class="list-inline-item"><a href="blog.html?post=policies">Guest Policies</a></li><li class="list-inline-item"><a href="contact.html">Contact</a></li><li class="list-inline-item"><a href="experience.html">Rewards &amp; Reviews</a></li><li class="list-inline-item"><a href="admin.html">Admin</a></li></ul>
+      <ul class="list-inline footer-links mb-3"><li class="list-inline-item"><a href="about.html">About</a></li><li class="list-inline-item"><a href="menu.html">Menu</a></li><li class="list-inline-item"><a href="blog.html?post=policies">Guest Policies</a></li><li class="list-inline-item"><a href="contact.html">Contact</a></li><li class="list-inline-item"><a href="experience.html">Rewards &amp; Reviews</a></li><li class="list-inline-item"><a href="gallery.html">Gallery</a></li><li class="list-inline-item"><a href="faq.html">FAQ &amp; Reviews</a></li><li class="list-inline-item"><a href="admin.html">Admin</a></li></ul>
       <div class="social mb-3"><a href="https://www.instagram.com/ancestracafe/" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a><a href="https://www.facebook.com/profile.php?id=61574579534127" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a></div>
       <hr>
       <p class="footer-note">© Ancestra Cafe — reproduced from the café's public website for an ITE17 academic project. Ordering, loyalty, voucher, review, reservation and admin tools are student-project features only.</p>

@@ -1,6 +1,57 @@
 /* Customer reviews: list, summary, submission, sort/search, helpful, pagination */
 const REVIEW_PAGE_SIZE = 5;
 let reviewPage = 1;
+let reviewPhoto = null;
+
+function compressImage(file, maxDim = 900, quality = 0.75) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Could not read file"));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("Not a valid image"));
+      img.onload = () => {
+        let { width: w, height: h } = img;
+        const scale = Math.min(1, maxDim / Math.max(w, h));
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+        const c = document.createElement("canvas");
+        c.width = w;
+        c.height = h;
+        c.getContext("2d").drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL("image/jpeg", quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function ensureReviewViewer() {
+  if (document.querySelector(".photo-viewer")) return;
+  const dialog = document.createElement("dialog");
+  dialog.className = "photo-viewer";
+  dialog.setAttribute("aria-label", "Review photo preview");
+  dialog.innerHTML = `<button class="photo-viewer-close" type="button" aria-label="Close photo preview">×</button><figure><img alt=""><figcaption></figcaption></figure>`;
+  document.body.appendChild(dialog);
+  const preview = dialog.querySelector("img");
+  const caption = dialog.querySelector("figcaption");
+  const close = () => dialog.open && dialog.close();
+  dialog.querySelector(".photo-viewer-close").addEventListener("click", close);
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) close();
+  });
+  dialog.addEventListener("close", () => preview.removeAttribute("src"));
+  return dialog;
+}
+
+function openReviewPhoto(src, caption) {
+  const dialog = ensureReviewViewer();
+  if (!dialog) return;
+  dialog.querySelector("img").src = src;
+  dialog.querySelector("figcaption").textContent = caption || "";
+  dialog.showModal();
+}
 
 function isVerifiedPurchase(name) {
   const orders = Store.get("orders", []);
@@ -74,6 +125,7 @@ function renderReviews() {
       </div>
       ${r.dish ? `<span class="tag-pill my-2 d-inline-block">${escapeHtml(r.dish)}</span>` : ""}
       <p class="mb-0 mt-1">${escapeHtml(r.text)}</p>
+      ${r.photo ? `<button type="button" class="review-photo-btn p-0 border-0 bg-transparent mt-2" data-photo="${r.id}" aria-label="View photo from ${escapeHtml(r.name)}"><img src="${r.photo}" alt="Photo from ${escapeHtml(r.name)}" style="width:100%;max-height:220px;object-fit:cover;border-radius:8px;border:1px solid #d7cbbd;cursor:zoom-in"></button>` : ""}
       ${r.reply ? `<div class="card-soft p-2 mt-2 small"><strong>Café:</strong> ${escapeHtml(r.reply)}</div>` : ""}
       <div class="d-flex align-items-center gap-2 mt-2">
         <button class="btn btn-outline-secondary btn-sm" data-helpful="${r.id}">👍 Helpful <span class="helpful-count">${helpfulCount(r.id)}</span></button>
@@ -123,11 +175,184 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   document.getElementById("reviewList").addEventListener("click", (e) => {
+    const photoBtn = e.target.closest("[data-photo]");
+    if (photoBtn) {
+      const rev = getReviews().find((r) => r.id === photoBtn.dataset.photo);
+      if (rev && rev.photo) openReviewPhoto(rev.photo, `${rev.name} — ${rev.dish || "their order"}`);
+      return;
+    }
     const b = e.target.closest("[data-helpful]");
     if (!b) return;
     toggleHelpful(b.dataset.helpful);
     renderReviews();
   });
+
+  const photoPreview = document.getElementById("vPhotoPreview");
+  const photoRemove = document.getElementById("vPhotoRemove");
+  const showPhotoPreview = (dataUrl) => {
+    reviewPhoto = dataUrl;
+    if (photoPreview) {
+      photoPreview.src = dataUrl;
+      photoPreview.classList.remove("d-none");
+    }
+    if (photoRemove) photoRemove.classList.remove("d-none");
+    toast("Photo added to your review.");
+  };
+  const setPhoto = (file) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast("Please choose an image file.", "warning");
+      return;
+    }
+    compressImage(file)
+      .then(showPhotoPreview)
+      .catch(() => toast("That file doesn't look like an image.", "warning"));
+  };
+  const fileInput = document.getElementById("vPhotoFile");
+  if (fileInput) fileInput.addEventListener("change", () => setPhoto(fileInput.files[0]));
+  if (photoRemove) {
+    photoRemove.addEventListener("click", () => {
+      reviewPhoto = null;
+      if (fileInput) fileInput.value = "";
+      if (photoPreview) {
+        photoPreview.removeAttribute("src");
+        photoPreview.classList.add("d-none");
+      }
+      photoRemove.classList.add("d-none");
+    });
+  }
+
+  // ---- In-page camera for food photos ----
+  const camModalEl = document.getElementById("reviewCamModal");
+  const camVideo = document.getElementById("reviewCamVideo");
+  const camCountdown = document.getElementById("reviewCamCountdown");
+  const camStatus = document.getElementById("reviewCamStatus");
+  const camShoot = document.getElementById("reviewCamShoot");
+  const camRetake = document.getElementById("reviewCamRetake");
+  const camUse = document.getElementById("reviewCamUse");
+  let camStream = null;
+  let camShot = null;
+
+  const stopReviewCam = () => {
+    if (camStream) {
+      camStream.getTracks().forEach((t) => t.stop());
+      camStream = null;
+    }
+    if (camVideo) camVideo.srcObject = null;
+    camShot = null;
+    if (camRetake) camRetake.disabled = true;
+    if (camUse) camUse.disabled = true;
+    if (camShoot) camShoot.disabled = false;
+  };
+  const showLive = (on) => {
+    if (camVideo) camVideo.classList.toggle("d-none", !on);
+    const shot = document.getElementById("reviewCamShot");
+    if (shot) shot.classList.toggle("d-none", on);
+  };
+
+  const startReviewCam = async () => {
+    if (!camModalEl || !window.bootstrap) return;
+    const m = bootstrap.Modal.getOrCreateInstance(camModalEl);
+    if (camStatus) {
+      camStatus.textContent = "";
+      camStatus.classList.add("d-none");
+    }
+    showLive(true);
+    m.show();
+    if (camStream) return;
+    try {
+      camStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment", width: { ideal: 1280 } },
+        audio: false,
+      });
+      camVideo.srcObject = camStream;
+    } catch (err) {
+      if (camStatus) {
+        camStatus.textContent =
+          "Camera unavailable or permission denied. Use “Upload photo” instead.";
+        camStatus.classList.remove("d-none");
+      }
+      if (camShoot) camShoot.disabled = true;
+    }
+  };
+
+  const grabReviewFrame = () => {
+    const w = camVideo.videoWidth || 640;
+    const h = camVideo.videoHeight || 480;
+    const c = document.createElement("canvas");
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext("2d");
+    ctx.save();
+    ctx.translate(w, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(camVideo, 0, 0, w, h);
+    ctx.restore();
+    return c.toDataURL("image/jpeg", 0.85);
+  };
+
+  const camBtn = document.getElementById("vPhotoCamBtn");
+  if (camBtn) camBtn.addEventListener("click", startReviewCam);
+
+  if (camShoot) {
+    camShoot.addEventListener("click", async () => {
+      if (!camStream || !camVideo || camVideo.readyState < 2) {
+        if (camStatus) {
+          camStatus.textContent = "Camera isn't ready yet.";
+          camStatus.classList.remove("d-none");
+        }
+        return;
+      }
+      camShoot.disabled = true;
+      for (let c = 3; c > 0; c--) {
+        if (camCountdown) {
+          camCountdown.textContent = c;
+          camCountdown.classList.remove("d-none");
+        }
+        await new Promise((r) => setTimeout(r, 700));
+      }
+      if (camCountdown) {
+        camCountdown.textContent = "📸";
+        await new Promise((r) => setTimeout(r, 250));
+        camCountdown.classList.add("d-none");
+      }
+      camShot = grabReviewFrame();
+      let shot = document.getElementById("reviewCamShot");
+      if (!shot) {
+        shot = document.createElement("img");
+        shot.id = "reviewCamShot";
+        shot.alt = "Captured photo";
+        shot.style.cssText = "width:100%;display:block;border-radius:8px";
+        camVideo.parentElement.appendChild(shot);
+      }
+      shot.src = camShot;
+      showLive(false);
+      if (camRetake) camRetake.disabled = false;
+      if (camUse) camUse.disabled = false;
+    });
+  }
+  if (camRetake) {
+    camRetake.addEventListener("click", () => {
+      camShot = null;
+      showLive(true);
+      camRetake.disabled = true;
+      camUse.disabled = true;
+      camShoot.disabled = false;
+    });
+  }
+  if (camUse) {
+    camUse.addEventListener("click", () => {
+      if (!camShot) return;
+      showPhotoPreview(camShot);
+      stopReviewCam();
+      showLive(true);
+      if (camModalEl && window.bootstrap) {
+        const m = bootstrap.Modal.getInstance(camModalEl);
+        if (m) m.hide();
+      }
+    });
+  }
+  if (camModalEl) camModalEl.addEventListener("hidden.bs.modal", stopReviewCam);
 
   document.getElementById("reviewForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -146,13 +371,22 @@ document.addEventListener("DOMContentLoaded", () => {
       rating: Number(rating.value),
       dish: dish.value,
       text: document.getElementById("vText").value.trim(),
+      photo: reviewPhoto || null,
       date: new Date().toISOString(),
       hidden: false,
       reply: null,
     });
     Store.set("reviews", list);
+    reviewPhoto = null;
     form.reset();
     form.classList.remove("was-validated");
+    const photoPrev2 = document.getElementById("vPhotoPreview");
+    if (photoPrev2) {
+      photoPrev2.removeAttribute("src");
+      photoPrev2.classList.add("d-none");
+    }
+    const photoRemove2 = document.getElementById("vPhotoRemove");
+    if (photoRemove2) photoRemove2.classList.add("d-none");
     toast("Thank you for your review!");
     reviewPage = 1;
     renderReviews();
