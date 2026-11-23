@@ -23,7 +23,7 @@ This is the uploaded café project updated with Ancestra Cafe business content a
 ## Eight features retained
 1. Table reservation form (local demo only; Ancestra's published policy says table reservations are not accepted)
 2. Interactive menu ordering/cart (demo only; orders are not sent to Ancestra)
-3. Digital loyalty card (based on the published 9-stamp reward terms; browser demo only)
+3. Digital loyalty card (points-based: 1 point per ₱10 spent, 135 points = free drink; browser demo only)
 4. Promo vouchers (sample project codes only, not official promotions)
 5. Customer reviews (user-submitted demo reviews; no fabricated testimonials preloaded)
 6. Admin dashboard (demo password: `admin123`; not secure and no backend)
@@ -52,6 +52,18 @@ This pass preserves the existing Ancestra-inspired palette, typography, centered
 - reduced-motion preferences continue to be respected.
 
 The added interactions are front-end only. Existing cart, loyalty, voucher, review, reservation-demo, and admin behavior remains unchanged. Reservation and ordering demos are not connected to Ancestra Cafe systems and do not create real bookings or payments.
+
+## Enhancement pass (current)
+- Per-category menu artwork (coffee keeps the placeholder; other categories use their named PNGs).
+- Time-gated food items (grayed + disabled before 10:30 AM).
+- Recently viewed strip and "Recommended for you" on the menu page.
+- Item detail modal with nutrition/allergen/tags/pairings and dietary filters.
+- Cart: inline quantity, remove + undo, per-item notes, saved carts, discount progress, scheduled pickup, printable receipts, reorder.
+- Rewards: customer-chosen reward catalog (135/500/1000 pts), tiers, QR, referral, birthday bonus, points history, confetti.
+- Reviews: sort/search, helpful votes, verified-purchase badge, café replies, pagination; "Our guests" photo wall.
+- Contact: live open/closed status, FAQ, gift cards & catering with budget calculator, browser notifications.
+- Site-wide: dark mode, PWA (manifest + service worker), onboarding tour, keyboard-shortcuts help, SEO structured data, robots/sitemap.
+- Admin: charts, table search, menu availability toggles, gallery moderation, review replies, CSV exports (orders/reservations/reviews).
 
 
 ## Cleaner homepage and feature access

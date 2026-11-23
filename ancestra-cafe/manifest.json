@@ -1,0 +1,11 @@
+{
+  "name": "Ancestra Cafe",
+  "short_name": "Ancestra",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7f1e8",
+  "theme_color": "#284484",
+  "icons": [
+    { "src": "images/logo.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

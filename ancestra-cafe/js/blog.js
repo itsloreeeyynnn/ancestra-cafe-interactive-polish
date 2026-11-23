@@ -158,6 +158,7 @@
         if (card && isFlipped(card)) syncHeight(card);
       });
     });
+    if (typeof initReactions === "function") initReactions();
   }
 
   if (document.readyState === "loading") {

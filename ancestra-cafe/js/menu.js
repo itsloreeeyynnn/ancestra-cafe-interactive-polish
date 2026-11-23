@@ -1,4 +1,4 @@
-/* Ancestra Cafe menu transcribed from the two menu-board images on ancestracafe.ph.
+﻿/* Ancestra Cafe menu transcribed from the two menu-board images on ancestracafe.ph.
    Descriptions are copied/paraphrased from the board. This ordering/cart is a student-project demo. */
 const MENU = [
   // Coffee (hot / iced)
@@ -8,7 +8,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 120,
-    emoji: "☕",
+    emoji: "â˜•",
     image: "images/menu/americano.jpg",
     desc: "Americano (hot / iced).",
     tags: [],
@@ -19,7 +19,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 145,
-    emoji: "☕",
+    emoji: "â˜•",
     image: "images/menu/latte-cappuccino.jpg",
     desc: "Latte / cappuccino (hot / iced).",
     tags: [],
@@ -30,7 +30,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 180,
-    emoji: "☕",
+    emoji: "â˜•",
     image: "images/menu/white-mocha.jpg",
     desc: "White mocha (hot / iced).",
     tags: [],
@@ -41,7 +41,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 170,
-    emoji: "☕",
+    emoji: "â˜•",
     image: "images/menu/salted-caramel-latte.jpg",
     desc: "Salted caramel latte (hot / iced).",
     tags: [],
@@ -52,7 +52,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 170,
-    emoji: "☕",
+    emoji: "â˜•",
     image: "images/menu/macadamia-latte.jpg",
     desc: "Macadamia latte (hot / iced).",
     tags: [],
@@ -63,7 +63,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 170,
-    emoji: "☕",
+    emoji: "â˜•",
     image: "images/menu/tableya-mocha.jpg",
     desc: "Tableya mocha (hot / iced).",
     tags: [],
@@ -74,7 +74,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 180,
-    emoji: "☕",
+    emoji: "â˜•",
     image: "images/menu/coconut-latte.jpg",
     desc: "Coconut latte (hot / iced).",
     tags: [],
@@ -85,7 +85,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 180,
-    emoji: "☕",
+    emoji: "â˜•",
     image: "images/menu/ube-spanish-latte.jpg",
     desc: "Ube Spanish latte (hot / iced).",
     tags: [],
@@ -96,7 +96,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 160,
-    emoji: "🧊",
+    emoji: "ðŸ§Š",
     image: "images/menu/cold-brew-black.jpg",
     desc: "Cold brew black.",
     tags: [],
@@ -107,7 +107,7 @@ const MENU = [
     cat: "Coffee",
     group: "drink",
     price: 170,
-    emoji: "🧊",
+    emoji: "ðŸ§Š",
     image: "images/menu/latik-foam-cold-brew.jpg",
     desc: "Cold brew with latik foam.",
     tags: [],
@@ -118,7 +118,7 @@ const MENU = [
     cat: "Coffee",
     group: "addon",
     price: 70,
-    emoji: "☕",
+    emoji: "â˜•",
     image: "images/menu/extra-espresso-shot.jpg",
     desc: "Extra espresso shot.",
     tags: [],
@@ -130,7 +130,7 @@ const MENU = [
     cat: "Non-Coffee",
     group: "drink",
     price: 195,
-    emoji: "🍵",
+    emoji: "ðŸµ",
     image: "images/menu/matcha-latte.jpg",
     desc: "Matcha latte.",
     tags: [],
@@ -141,7 +141,7 @@ const MENU = [
     cat: "Non-Coffee",
     group: "drink",
     price: 215,
-    emoji: "🍵",
+    emoji: "ðŸµ",
     image: "images/menu/coconut-matcha.jpg",
     desc: "Coconut matcha.",
     tags: [],
@@ -152,7 +152,7 @@ const MENU = [
     cat: "Non-Coffee",
     group: "drink",
     price: 125,
-    emoji: "🫖",
+    emoji: "ðŸ«–",
     image: "images/menu/english-tea.jpg",
     desc: "English tea.",
     tags: [],
@@ -163,7 +163,7 @@ const MENU = [
     cat: "Non-Coffee",
     group: "drink",
     price: 150,
-    emoji: "🍫",
+    emoji: "ðŸ«",
     image: "images/menu/hot-chocolate.jpg",
     desc: "Hot chocolate.",
     tags: [],
@@ -174,7 +174,7 @@ const MENU = [
     cat: "Non-Coffee",
     group: "drink",
     price: 135,
-    emoji: "🍋",
+    emoji: "ðŸ‹",
     image: "images/menu/calamansi-iced-tea.jpg",
     desc: "Calamansi iced tea.",
     tags: [],
@@ -185,7 +185,7 @@ const MENU = [
     cat: "Non-Coffee",
     group: "drink",
     price: 150,
-    emoji: "🥤",
+    emoji: "ðŸ¥¤",
     image: "images/menu/dalandan-soda.jpg",
     desc: "Dalandan soda.",
     tags: [],
@@ -197,7 +197,7 @@ const MENU = [
     cat: "Ice Blended",
     group: "drink",
     price: 185,
-    emoji: "🥤",
+    emoji: "ðŸ¥¤",
     image: "images/menu/latte-frappe.jpg",
     desc: "Coffee-based ice blended drink.",
     tags: [],
@@ -208,7 +208,7 @@ const MENU = [
     cat: "Ice Blended",
     group: "drink",
     price: 195,
-    emoji: "🥤",
+    emoji: "ðŸ¥¤",
     image: "images/menu/tableya-mocha-frappe.jpg",
     desc: "Coffee-based ice blended drink.",
     tags: [],
@@ -219,7 +219,7 @@ const MENU = [
     cat: "Ice Blended",
     group: "drink",
     price: 195,
-    emoji: "🥤",
+    emoji: "ðŸ¥¤",
     image: "images/menu/white-mocha-frappe.jpg",
     desc: "Coffee-based ice blended drink.",
     tags: [],
@@ -230,7 +230,7 @@ const MENU = [
     cat: "Ice Blended",
     group: "drink",
     price: 195,
-    emoji: "🥤",
+    emoji: "ðŸ¥¤",
     image: "images/menu/butterscotch-crunch-frappe.jpg",
     desc: "Coffee-based ice blended drink.",
     tags: [],
@@ -241,7 +241,7 @@ const MENU = [
     cat: "Ice Blended",
     group: "drink",
     price: 195,
-    emoji: "🥤",
+    emoji: "ðŸ¥¤",
     image: "images/menu/banana-caramel-frappe.jpg",
     desc: "Coffee-based ice blended drink.",
     tags: [],
@@ -252,7 +252,7 @@ const MENU = [
     cat: "Ice Blended",
     group: "drink",
     price: 195,
-    emoji: "🥭",
+    emoji: "ðŸ¥­",
     image: "images/menu/mango-cream-frappe.jpg",
     desc: "Ice blended mango cream drink.",
     tags: [],
@@ -263,7 +263,7 @@ const MENU = [
     cat: "Ice Blended",
     group: "drink",
     price: 160,
-    emoji: "🍋",
+    emoji: "ðŸ‹",
     image: "images/menu/calamansi-slush.jpg",
     desc: "Calamansi slush.",
     tags: [],
@@ -275,7 +275,7 @@ const MENU = [
     cat: "Sandwiches",
     group: "food",
     price: 240,
-    emoji: "🥪",
+    emoji: "ðŸ¥ª",
     image: "images/menu/ancestra-blt.jpg",
     desc: "Crispy bacon, lettuce, tomatoes, pickled onions, housemade sauce, sourdough, fries.",
     tags: [],
@@ -286,7 +286,7 @@ const MENU = [
     cat: "Sandwiches",
     group: "food",
     price: 245,
-    emoji: "🥪",
+    emoji: "ðŸ¥ª",
     image: "images/menu/grilled-cheese-pimiento.jpg",
     desc: "Four cheese pimiento, sourdough, fries.",
     tags: [],
@@ -297,7 +297,7 @@ const MENU = [
     cat: "Sandwiches",
     group: "food",
     price: 245,
-    emoji: "🥪",
+    emoji: "ðŸ¥ª",
     image: "images/menu/chicken-pomodoro.jpg",
     desc: "Grilled chicken, mozzarella, seasonal greens, tomato, sourdough, fries.",
     tags: [],
@@ -309,7 +309,7 @@ const MENU = [
     cat: "Small Plates",
     group: "food",
     price: 190,
-    emoji: "🥦",
+    emoji: "ðŸ¥¦",
     image: "images/menu/honey-sriracha-cauliflower.jpg",
     desc: "Deep fried cauliflower, sriracha mayo.",
     tags: [],
@@ -321,7 +321,7 @@ const MENU = [
     cat: "Small Plates",
     group: "food",
     price: 195,
-    emoji: "🍗",
+    emoji: "ðŸ—",
     image: "images/menu/hanoi-wings.jpg",
     desc: "Deep fried wing drumettes, Vietnamese glaze.",
     tags: [],
@@ -334,7 +334,7 @@ const MENU = [
     cat: "Pasta",
     group: "food",
     price: 335,
-    emoji: "🍝",
+    emoji: "ðŸ",
     image: "images/menu/ancestra-pasta.jpg",
     desc: "Housemade coconut cream sauce, shrimp, linguine.",
     tags: [],
@@ -346,7 +346,7 @@ const MENU = [
     cat: "Pasta",
     group: "food",
     price: 295,
-    emoji: "🍝",
+    emoji: "ðŸ",
     image: "images/menu/carbonara-de-cebu.jpg",
     desc: "Creamy carbonara with sweet chorizo de Cebu, parmesan, spaghetti.",
     tags: [],
@@ -358,7 +358,7 @@ const MENU = [
     cat: "Pasta",
     group: "food",
     price: 325,
-    emoji: "🍝",
+    emoji: "ðŸ",
     image: "images/menu/malunggay-pesto-pasta.jpg",
     desc: "Grilled chicken, malunggay, basil.",
     tags: [],
@@ -371,7 +371,7 @@ const MENU = [
     cat: "Salad",
     group: "food",
     price: 270,
-    emoji: "🥗",
+    emoji: "ðŸ¥—",
     image: "images/menu/mandarin-chicken-salad.jpg",
     desc: "Seasonal greens, mandarin orange, cashews, crispy noodles, cider vinegar dressing.",
     tags: [],
@@ -383,7 +383,7 @@ const MENU = [
     cat: "Salad",
     group: "food",
     price: 290,
-    emoji: "🥗",
+    emoji: "ðŸ¥—",
     image: "images/menu/mango-shrimp-salad.jpg",
     desc: "Seasonal greens, mango, peanuts, red onions, carrots, Thai dressing.",
     tags: [],
@@ -396,7 +396,7 @@ const MENU = [
     cat: "Mains",
     group: "food",
     price: 385,
-    emoji: "🍛",
+    emoji: "ðŸ›",
     image: "images/menu/ancestra-humba.jpg",
     desc: "Humba, fried egg, served with rice and stir-fried cabbage.",
     tags: [],
@@ -408,7 +408,7 @@ const MENU = [
     cat: "Mains",
     group: "food",
     price: 290,
-    emoji: "🍛",
+    emoji: "ðŸ›",
     image: "images/menu/chicken-katsu-curry.jpg",
     desc: "Breaded chicken katsu with Filipino curry, served with rice.",
     tags: [],
@@ -420,7 +420,7 @@ const MENU = [
     cat: "Mains",
     group: "food",
     price: 365,
-    emoji: "🍛",
+    emoji: "ðŸ›",
     image: "images/menu/seafood-thai-green-curry.jpg",
     desc: "Shrimp, squid, mussels in a green curry, served with rice and pickled cucumber salad.",
     tags: [],
@@ -432,7 +432,7 @@ const MENU = [
     cat: "Mains",
     group: "food",
     price: 295,
-    emoji: "🍤",
+    emoji: "ðŸ¤",
     image: "images/menu/gambas-al-ajillo.jpg",
     desc: "Shrimp, olive oil, paprika, garlic, served with rice and pickled cucumber salad.",
     tags: [],
@@ -444,7 +444,7 @@ const MENU = [
     cat: "Mains",
     group: "food",
     price: 310,
-    emoji: "🍔",
+    emoji: "ðŸ”",
     image: "images/menu/loco-moco-burger-steak.jpg",
     desc: "Hawaiian style all-beef patty, coconut gravy, topped with fried egg and pickled cucumber salad.",
     tags: [],
@@ -456,7 +456,7 @@ const MENU = [
     cat: "Mains",
     group: "food",
     price: 585,
-    emoji: "🥩",
+    emoji: "ðŸ¥©",
     image: "images/menu/tenderloin-salpicao.jpg",
     desc: "Beef tenderloin, garlic and olive oil, stir-fried cabbage.",
     tags: [],
@@ -469,7 +469,7 @@ const MENU = [
     cat: "Sides",
     group: "food",
     price: 40,
-    emoji: "🍚",
+    emoji: "ðŸš",
     image: "images/menu/plain-rice.jpg",
     desc: "Plain rice.",
     tags: [],
@@ -480,12 +480,51 @@ const MENU = [
     cat: "Sides",
     group: "food",
     price: 80,
-    emoji: "🍟",
+    emoji: "ðŸŸ",
     image: "images/menu/french-fries.jpg",
     desc: "French fries.",
     tags: [],
   },
 ];
+/* Enrich menu items with nutrition/allergen/dietary data (defaults). */
+MENU.forEach((m) => {
+  if (typeof m.calories !== "number")
+    m.calories = m.group === "drink" ? 160 : m.group === "addon" ? 40 : 420;
+  if (!Array.isArray(m.allergens)) {
+    const text = (m.name + " " + m.desc).toLowerCase();
+    const a = [];
+    if (/milk|cheese|cream|butter|latte|mozzarella|parmesan/.test(text)) a.push("Dairy");
+    if (/shrimp|squid|mussels|seafood/.test(text)) a.push("Shellfish");
+    if (/egg/.test(text)) a.push("Egg");
+    if (/peanut|cashew|nut/.test(text)) a.push("Nuts");
+    if (/wheat|bread|sourdough|pasta|spaghetti|linguine/.test(text)) a.push("Gluten");
+    if (!a.length) a.push("None listed");
+    m.allergens = a;
+  }
+  if (!Array.isArray(m.tags)) {
+    const text = (m.name + " " + m.desc).toLowerCase();
+    const t = [];
+    if (m.group === "drink" || m.group === "addon") t.push("drink");
+    else t.push("food");
+    if (!/chicken|beef|shrimp|pork|bacon|squid|mussels/.test(text)) t.push("vegetarian");
+    if (/coffee|espresso|latte|mocha|cappuccino|americano|brew/.test(text)) t.push("caffeine");
+    m.tags = t;
+  }
+  if (!Array.isArray(m.pairsWith)) m.pairsWith = [];
+});
+/* Pairing suggestions */
+const PAIRS = {
+  c1: ["s1", "sp2"],
+  c2: ["s2", "sp1"],
+  c6: ["p1", "m1"],
+  p1: ["c2", "n3"],
+  m1: ["sd1", "c6"],
+};
+Object.keys(PAIRS).forEach((k) => {
+  const m = MENU.find((x) => x.id === k);
+  if (m) m.pairsWith = PAIRS[k];
+});
+
 const TILE = {
   Coffee: "tile-coffee",
   "Non-Coffee": "tile-tea",
@@ -509,10 +548,24 @@ const CATS = [
   "Mains",
   "Sides",
 ];
+/* Category artwork chosen by the user; coffee keeps the placeholder. */
+const CAT_IMAGE = {
+  Coffee: "images/menu/placeholder.png",
+  "Non-Coffee": "images/menu/non-coffee.png",
+  "Ice Blended": "images/menu/iceblended.png",
+  Sandwiches: "images/menu/sandwiches.png",
+  "Small Plates": "images/menu/smallplate.png",
+  Pasta: "images/menu/pasta.png",
+  Salad: "images/menu/salad.png",
+  Mains: "images/menu/mains.png",
+  Sides: "images/menu/sidedish.png",
+};
+const catImage = (m) => CAT_IMAGE[m.cat] || m.image || "images/menu/placeholder.png";
 const state = {
   q: "",
   cat: "All",
   diet: "all",
+  allergen: "all",
   sort: "default",
   favOnly: false,
 };
@@ -537,13 +590,87 @@ function filtered() {
       (state.diet === "drink"
         ? m.group === "drink" || m.group === "addon"
         : m.group === "food");
+    const matchA =
+      state.allergen === "all" ||
+      (state.allergen === "vegetarian"
+        ? m.tags.includes("vegetarian")
+        : !m.allergens.includes(state.allergen));
     const matchF = !state.favOnly || favs.includes(m.id);
-    return matchQ && matchC && matchD && matchF;
+    return matchQ && matchC && matchD && matchA && matchF;
   });
   if (state.sort === "low") list.sort((a, b) => a.price - b.price);
   if (state.sort === "high") list.sort((a, b) => b.price - a.price);
   if (state.sort === "az") list.sort((a, b) => a.name.localeCompare(b.name));
   return list;
+}
+function renderRecommended() {
+  const box = document.getElementById("recommended");
+  if (!box) return;
+  const favs = Store.get("favs", []);
+  const orders = Store.get("orders", []);
+  const recentCats = new Set();
+  favs.forEach((id) => {
+    const m = MENU.find((x) => x.id === id);
+    if (m) recentCats.add(m.cat);
+  });
+  orders.forEach((o) =>
+    (o.items || []).forEach((i) => {
+      const m = MENU.find((x) => x.name === i.name);
+      if (m) recentCats.add(m.cat);
+    }),
+  );
+  let recs = MENU.filter((m) => recentCats.has(m.cat) && !favs.includes(m.id));
+  if (!recs.length)
+    recs = MENU.filter((m) => ["c1", "c2", "p1", "m1"].includes(m.id));
+  recs = recs.slice(0, 4);
+  if (!recs.length) {
+    box.innerHTML = "";
+    return;
+  }
+  box.innerHTML =
+    `<p class="small text-muted-2 mb-2">Recommended for you</p>` +
+    `<div class="d-flex flex-wrap gap-2">` +
+    recs
+      .map(
+        (m) =>
+          `<button type="button" class="btn btn-outline-blue btn-sm" data-rec="${m.id}">${escapeHtml(m.name)}</button>`,
+      )
+      .join("") +
+    `</div>`;
+}
+function openItemModal(id) {
+  const m = MENU.find((x) => x.id === id);
+  if (!m) return;
+  const pairs = (m.pairsWith || [])
+    .map((pid) => MENU.find((x) => x.id === pid))
+    .filter(Boolean);
+  const content = document.getElementById("itemModalContent");
+  if (!content) return;
+  content.innerHTML = `
+    <div class="row g-3">
+      <div class="col-md-5"><img src="${escapeHtml(catImage(m))}" class="img-fluid rounded" alt="${escapeHtml(m.name)}" onerror="this.src='images/menu/placeholder.png'"></div>
+      <div class="col-md-7">
+        <h3>${escapeHtml(m.name)}</h3>
+        <p class="small text-muted-2">${escapeHtml(m.desc)}</p>
+        ${m.serving ? `<p class="small text-muted-2">${escapeHtml(m.serving)}</p>` : ""}
+        <p class="mb-1"><strong>${Peso(m.price)}</strong></p>
+        <p class="small text-muted-2 mb-1">Calories: ~${m.calories} kcal · Allergens: ${m.allergens.join(", ")}</p>
+        <p class="small text-muted-2 mb-1">Tags: ${m.tags.join(", ")}</p>
+        ${pairs.length ? `<p class="small mb-2">Pairs well with: ${pairs.map((p) => escapeHtml(p.name)).join(", ")}</p>` : ""}
+        <div class="d-flex gap-2">
+          <button class="btn btn-blue btn-sm" data-add="${m.id}" data-bs-dismiss="modal">Add to cart</button>
+          <button class="btn btn-outline-blue btn-sm" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>`;
+  new bootstrap.Modal(document.getElementById("itemModal")).show();
+}
+function servingAvailable(m) {
+  if (!m.serving) return true;
+  const now = new Date();
+  const cutoff = new Date();
+  cutoff.setHours(10, 30, 0, 0);
+  return now >= cutoff;
 }
 function renderMenu() {
   const favs = Store.get("favs", []);
@@ -554,16 +681,51 @@ function renderMenu() {
     .getElementById("emptyState")
     .classList.toggle("d-none", list.length > 0);
   document.getElementById("menuGrid").innerHTML = list
-    .map(
-      (m) =>
-        `<div class="col"><article class="card-soft hover-lift h-100 d-flex flex-column overflow-hidden"><div class="menu-tile ${TILE[m.cat]}" aria-hidden="true"><img src="${escapeHtml(m.image)}" alt="" loading="lazy" onerror="this.src='images/menu/placeholder.png';this.parentElement.classList.add('is-placeholder')"><span class="menu-tile-fallback">${m.emoji}</span></div><div class="p-3 d-flex flex-column flex-grow-1"><div class="d-flex justify-content-between align-items-start"><h3 class="h5 mb-1">${escapeHtml(m.name)}</h3><button class="fav-btn" data-fav="${m.id}" aria-label="${favs.includes(m.id) ? "Remove from" : "Add to"} favorites" aria-pressed="${favs.includes(m.id)}"><i class="bi ${favs.includes(m.id) ? "bi-heart-fill" : "bi-heart"}"></i></button></div><p class="small text-muted-2 mb-2 flex-grow-1">${escapeHtml(m.desc)}</p>${m.serving ? `<p class="small text-muted-2 mb-2">${escapeHtml(m.serving)}</p>` : ""}<div class="d-flex justify-content-between align-items-center mt-auto"><span class="price">${Peso(m.price)}</span><button class="btn btn-blue btn-sm" data-add="${m.id}"><i class="bi bi-plus-lg me-1"></i>Add</button></div></div></article></div>`,
-    )
+    .map((m) => {
+      const fav = favs.includes(m.id);
+      const disabledItems = Store.get("disabledItems", []);
+      const unavailable = !servingAvailable(m) || disabledItems.includes(m.id);
+      const tile = `<div class="menu-tile ${TILE[m.cat]}" aria-hidden="true"><img src="${escapeHtml(catImage(m))}" alt="" loading="lazy" decoding="async" onerror="this.src='images/menu/placeholder.png';this.parentElement.classList.add('is-placeholder')"><span class="menu-tile-fallback">${m.emoji}</span></div>`;
+      const addBtn = unavailable
+        ? `<button class="btn btn-blue btn-sm" data-add="${m.id}" disabled aria-disabled="true"><i class="bi bi-clock me-1"></i>Not yet</button>`
+        : `<button class="btn btn-blue btn-sm" data-add="${m.id}"><i class="bi bi-plus-lg me-1"></i>Add</button>`;
+      return `<div class="col"><article class="card-soft hover-lift h-100 d-flex flex-column overflow-hidden ${unavailable ? "menu-item-unavailable" : ""}">${tile}<div class="p-3 d-flex flex-column flex-grow-1"><div class="d-flex justify-content-between align-items-start"><h3 class="h5 mb-1">${escapeHtml(m.name)}</h3><button class="fav-btn" data-fav="${m.id}" aria-label="${fav ? "Remove from" : "Add to"} favorites" aria-pressed="${fav}"><i class="bi ${fav ? "bi-heart-fill" : "bi-heart"}"></i></button></div><p class="small text-muted-2 mb-2 flex-grow-1">${escapeHtml(m.desc)}</p>${m.serving ? `<p class="small text-muted-2 mb-2"><span class="badge text-bg-secondary">${escapeHtml(m.serving)}</span></p>` : ""}<div class="d-flex justify-content-between align-items-center mt-auto"><span class="price">${Peso(m.price)}</span>${addBtn}</div></div></article></div>`;
+    })
     .join("");
+  if (typeof initReactions === "function") initReactions();
+}
+function trackRecent(id) {
+  let list = Store.get("recentlyViewed", []);
+  list = [id, ...list.filter((x) => x !== id)].slice(0, 6);
+  Store.set("recentlyViewed", list);
+  renderRecent();
+}
+function renderRecent() {
+  const box = document.getElementById("recentlyViewed");
+  if (!box) return;
+  const ids = Store.get("recentlyViewed", []);
+  if (!ids.length) {
+    box.innerHTML = "";
+    return;
+  }
+  const items = ids.map((id) => MENU.find((m) => m.id === id)).filter(Boolean);
+  box.innerHTML =
+    `<p class="small text-muted-2 mb-2">Recently viewed</p>` +
+    `<div class="d-flex flex-wrap gap-2">` +
+    items
+      .map(
+        (m) =>
+          `<button type="button" class="btn btn-outline-blue btn-sm" data-recent="${m.id}">${escapeHtml(m.name)}</button>`,
+      )
+      .join("") +
+    `</div>`;
 }
 document.addEventListener("DOMContentLoaded", () => {
   if (!document.getElementById("menuGrid")) return;
   renderPills();
   renderMenu();
+  renderRecent();
+  renderRecommended();
   document.getElementById("searchInput").addEventListener("input", (e) => {
     state.q = e.target.value.trim();
     renderMenu();
@@ -572,6 +734,12 @@ document.addEventListener("DOMContentLoaded", () => {
     state.diet = e.target.value;
     renderMenu();
   });
+  const allergenSel = document.getElementById("allergenSelect");
+  if (allergenSel)
+    allergenSel.addEventListener("change", (e) => {
+      state.allergen = e.target.value;
+      renderMenu();
+    });
   document.getElementById("sortSelect").addEventListener("change", (e) => {
     state.sort = e.target.value;
     renderMenu();
@@ -585,11 +753,14 @@ document.addEventListener("DOMContentLoaded", () => {
       q: "",
       cat: "All",
       diet: "all",
+      allergen: "all",
       sort: "default",
       favOnly: false,
     });
     document.getElementById("searchInput").value = "";
     document.getElementById("dietSelect").value = "all";
+    if (document.getElementById("allergenSelect"))
+      document.getElementById("allergenSelect").value = "all";
     document.getElementById("sortSelect").value = "default";
     document.getElementById("favToggle").checked = false;
     renderPills();
@@ -604,7 +775,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   document.getElementById("menuGrid").addEventListener("click", (e) => {
     const add = e.target.closest("[data-add]");
-    if (add) {
+    if (add && !add.disabled) {
       const m = MENU.find((x) => x.id === add.dataset.add);
       Cart.add({
         id: m.id,
@@ -613,6 +784,7 @@ document.addEventListener("DOMContentLoaded", () => {
         emoji: m.emoji,
         group: m.group,
       });
+      trackRecent(m.id);
       return;
     }
     const fav = e.target.closest("[data-fav]");
@@ -623,8 +795,27 @@ document.addEventListener("DOMContentLoaded", () => {
         : [...favs, fav.dataset.fav];
       Store.set("favs", favs);
       renderMenu();
+      return;
+    }
+    const card = e.target.closest("article");
+    if (card) {
+      const id = card.querySelector("[data-add]")?.dataset.add;
+      if (id) openItemModal(id);
     }
   });
+  const recentBox = document.getElementById("recentlyViewed");
+  if (recentBox)
+    recentBox.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-recent]");
+      if (!b) return;
+      const m = MENU.find((x) => x.id === b.dataset.recent);
+      if (!m) return;
+      document.getElementById("searchInput").value = m.name;
+      state.q = m.name;
+      renderMenu();
+      window.scrollTo({ top: document.getElementById("menuGrid").offsetTop - 120, behavior: "smooth" });
+    });
+
   const preset = new URLSearchParams(location.search).get("cat");
   if (preset && CATS.includes(preset)) {
     state.cat = preset;

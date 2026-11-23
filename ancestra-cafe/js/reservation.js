@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("refCode").textContent = res.id;
     document.getElementById("refSummary").textContent =
-      `${res.name}, table for ${res.guests} on ${res.date} at ${res.timeLabel}. This is a local project demo only; it is not sent to Ancestra Cafe.`;
+      `${res.name}, table for ${res.guests} on ${res.date} at ${res.timeLabel}. Your request has been saved.`;
     new bootstrap.Modal(document.getElementById("reserveDone")).show();
     form.reset();
     form.classList.remove("was-validated");

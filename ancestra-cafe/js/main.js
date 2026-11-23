@@ -40,30 +40,64 @@ const escapeHtml = (s) =>
   );
 const todayISO = () => new Date().toISOString().slice(0, 10);
 
+/* ---------- Points-based rewards ---------- */
+const POINTS_DIVISOR = 10;        // pesos spent per 1 point earned
+const FREE_DRINK_POINTS = 135;    // points needed for one free drink
+const STAMP_TO_POINTS = 15;       // migration: 1 old stamp = 15 points
+const pointsForAmount = (amount) =>
+  Math.floor(Number(amount) / POINTS_DIVISOR);
+
+function normalizeMember(m) {
+  if (!m) return null;
+  if (typeof m.points !== "number") {
+    if (typeof m.stamps === "number") m.points = m.stamps * STAMP_TO_POINTS;
+    else m.points = 0;
+  }
+  if (typeof m.lifetimePoints !== "number") m.lifetimePoints = m.points;
+  if (!m.referralCode) m.referralCode = "ANCESTRA-" + Math.random().toString(36).slice(2, 6).toUpperCase();
+  delete m.stamps;
+  return m;
+}
+const REWARDS = [
+  { id: "rw1", title: "Free Drink", points: 135, desc: "Any menu drink without add-ons", filter: (m) => m.group === "drink" },
+  { id: "rw2", title: "Free Frappe / Pastry", points: 500, desc: "One ice-blended drink or sandwich", filter: (m) => m.cat === "Ice Blended" || m.cat === "Sandwiches" },
+  { id: "rw3", title: "Free Meal Combo", points: 1000, desc: "One main plus a drink", filter: (m) => m.group === "food" },
+];
+function tierFor(points) {
+  if (points >= 1500) return "Gold";
+  if (points >= 500) return "Silver";
+  return "Bronze";
+}
+function addPointsHistory(reason, delta) {
+  const h = Store.get("pointsHistory", []);
+  h.unshift({ date: new Date().toISOString(), reason, delta });
+  Store.set("pointsHistory", h.slice(0, 50));
+}
+
 /* ---------- Promo vouchers (catalogue) ---------- */
 const VOUCHERS = [
   {
-    code: "PROJECT10",
-    title: "Project Demo Offer",
-    desc: "10% off a demo order (not an official café promotion)",
+    code: "WELCOME10",
+    title: "Welcome Offer",
+    desc: "10% off your order",
     type: "pct",
     value: 10,
     min: 0,
     label: "10%",
   },
   {
-    code: "PROJECT50",
-    title: "Project Demo Peso-Off",
-    desc: "₱50 off a demo order of ₱400 or more",
+    code: "SAVE50",
+    title: "Peso-Off Voucher",
+    desc: "₱50 off an order of ₱400 or more",
     type: "flat",
     value: 50,
     min: 400,
     label: "₱50",
   },
   {
-    code: "PROJECT15",
-    title: "Project Demo Food Offer",
-    desc: "15% off a demo order of ₱600 or more",
+    code: "FOOD15",
+    title: "Food Offer",
+    desc: "15% off an order of ₱600 or more",
     type: "pct",
     value: 15,
     min: 600,
@@ -71,8 +105,8 @@ const VOUCHERS = [
   },
   {
     code: "LOYALTYCOFFEE",
-    title: "Loyalty Coffee Reward (demo)",
-    desc: "One menu drink without add-ons after 9 stamps",
+    title: "Loyalty Coffee Reward",
+    desc: "One menu drink without add-ons",
     type: "reward",
     value: 0,
     min: 0,
@@ -115,6 +149,7 @@ const NAV_LINKS = [
   ["contact.html", "Contact", "contact"],
   ["experience.html", "Rewards", "experience"],
 ];
+
 function renderChrome() {
   const page = document.body.dataset.page;
   const links = NAV_LINKS.map(
@@ -148,9 +183,12 @@ function renderChrome() {
             <a class="nav-social" href="https://www.facebook.com/profile.php?id=61574579534127" target="_blank" rel="noopener" aria-label="Ancestra Cafe Facebook">
               <i class="bi bi-facebook"></i>
             </a>
-            <button class="btn btn-outline-blue btn-sm cart-btn ms-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas" aria-label="Open demo cart">
+            <button class="btn btn-outline-blue btn-sm ms-1" type="button" id="darkModeBtn" aria-label="Toggle dark mode">
+              <i class="bi bi-moon"></i>
+            </button>
+            <button class="btn btn-outline-blue btn-sm cart-btn ms-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas" aria-label="Open cart">
               <i class="bi bi-bag"></i>
-              <span class="badge rounded-pill cart-badge" id="cartBadge">0</span>
+              <span class="badge rounded-pill cart-badge" id="cartBadge" aria-live="polite" aria-atomic="true">0</span>
             </button>
           </div>
         </div>
@@ -161,7 +199,7 @@ function renderChrome() {
     footer.innerHTML = `<footer class="site-footer text-center"><div class="container">
       <img src="images/Lettermark+02.png" alt="Ancestra Cafe official wordmark" class="footer-wordmark mb-3">
       <p class="mb-3">A coffee shop for community, where heritage is celebrated.</p>
-      <ul class="list-inline footer-links mb-3"><li class="list-inline-item"><a href="about.html">About</a></li><li class="list-inline-item"><a href="menu.html">Menu</a></li><li class="list-inline-item"><a href="blog.html?post=policies">Guest Policies</a></li><li class="list-inline-item"><a href="contact.html">Contact</a></li><li class="list-inline-item"><a href="experience.html">Rewards &amp; Reviews</a></li><li class="list-inline-item"><a href="admin.html">Demo Admin</a></li></ul>
+      <ul class="list-inline footer-links mb-3"><li class="list-inline-item"><a href="about.html">About</a></li><li class="list-inline-item"><a href="menu.html">Menu</a></li><li class="list-inline-item"><a href="blog.html?post=policies">Guest Policies</a></li><li class="list-inline-item"><a href="contact.html">Contact</a></li><li class="list-inline-item"><a href="experience.html">Rewards &amp; Reviews</a></li><li class="list-inline-item"><a href="admin.html">Admin</a></li></ul>
       <div class="social mb-3"><a href="https://www.instagram.com/ancestracafe/" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a><a href="https://www.facebook.com/profile.php?id=61574579534127" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a></div>
       <hr>
       <p class="footer-note">© Ancestra Cafe — reproduced from the café's public website for an ITE17 academic project. Ordering, loyalty, voucher, review, reservation and admin tools are student-project features only.</p>
@@ -250,6 +288,20 @@ function initHeroVideo() {
 
 /* ---------- Small global UX improvements ---------- */
 function initGlobalUX() {
+  // Dark mode
+  const darkBtn = document.getElementById("darkModeBtn");
+  const applyDark = (on) => {
+    document.body.classList.toggle("dark-mode", on);
+    if (darkBtn) darkBtn.innerHTML = on ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
+  };
+  applyDark(Store.get("darkMode", false));
+  if (darkBtn)
+    darkBtn.addEventListener("click", () => {
+      const on = !document.body.classList.contains("dark-mode");
+      Store.set("darkMode", on);
+      applyDark(on);
+    });
+
   // Skip link helps keyboard and screen-reader users reach page content quickly.
   const main = document.querySelector("main");
   if (main) {
@@ -334,6 +386,63 @@ function initGlobalUX() {
   }
 
   initPhotoViewer();
+  initOnboardingAndShortcuts();
+  // PWA
+  if (!document.querySelector('link[rel="manifest"]')) {
+    const l = document.createElement("link");
+    l.rel = "manifest";
+    l.href = "manifest.json";
+    document.head.appendChild(l);
+  }
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
+}
+
+function initOnboardingAndShortcuts() {
+  // Keyboard shortcuts modal
+  if (!document.getElementById("shortcutsModal")) {
+    const m = document.createElement("div");
+    m.className = "modal fade";
+    m.id = "shortcutsModal";
+    m.tabIndex = -1;
+    m.innerHTML = `<div class="modal-dialog modal-dialog-centered"><div class="modal-content p-4">
+      <h5 class="mb-2">Keyboard shortcuts</h5>
+      <ul class="small mb-0">
+        <li><kbd>/</kbd> — Focus menu search (on Menu page)</li>
+        <li><kbd>?</kbd> — Show this help</li>
+        <li><kbd>Esc</kbd> — Close dialogs / blur search</li>
+      </ul>
+      <button class="btn btn-blue btn-sm mt-3" data-bs-dismiss="modal" type="button">Close</button>
+    </div></div>`;
+    document.body.appendChild(m);
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "?" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      const target = e.target;
+      const typing = target && (target.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(target.tagName));
+      if (typing) return;
+      e.preventDefault();
+      new bootstrap.Modal(document.getElementById("shortcutsModal")).show();
+    }
+  });
+
+  // Onboarding tour (first visit only)
+  if (!Store.get("onboarded", false)) {
+    Store.set("onboarded", true);
+    const tour = document.createElement("div");
+    tour.className = "modal fade";
+    tour.id = "onboardModal";
+    tour.tabIndex = -1;
+    tour.innerHTML = `<div class="modal-dialog modal-dialog-centered"><div class="modal-content p-4 text-center">
+      <div class="display-4 mb-2">👋</div>
+      <h5>Welcome to Ancestra Cafe</h5>
+      <p class="small text-muted-2">Browse the menu, add to cart, earn rewards points, and share reviews. Press <kbd>?</kbd> anytime for shortcuts.</p>
+      <button class="btn btn-blue btn-sm" data-bs-dismiss="modal" type="button">Get started</button>
+    </div></div>`;
+    document.body.appendChild(tour);
+    setTimeout(() => new bootstrap.Modal(tour).show(), 600);
+  }
 }
 
 /* Accessible, dependency-free photo viewer for café photography and menu boards. */
@@ -416,10 +525,75 @@ function initPageTransition() {
     });
 }
 
+const REACTIONS = ["☕", "❤️", "🔥"];
+function getReactions(id) {
+  const all = Store.get("reactions", {});
+  return (all && all[id]) || {};
+}
+function getMyReactions(id) {
+  const mine = Store.get("myReactions", {});
+  return (mine && mine[id]) || [];
+}
+function toggleReaction(id, emoji) {
+  const all = Store.get("reactions", {}) || {};
+  const mine = Store.get("myReactions", {}) || {};
+  if (!all[id]) all[id] = {};
+  if (!mine[id]) mine[id] = [];
+  const has = mine[id].includes(emoji);
+  if (has) {
+    all[id][emoji] = Math.max(0, (all[id][emoji] || 0) - 1);
+    mine[id] = mine[id].filter((e) => e !== emoji);
+  } else {
+    all[id][emoji] = (all[id][emoji] || 0) + 1;
+    mine[id].push(emoji);
+  }
+  Store.set("reactions", all);
+  Store.set("myReactions", mine);
+}
+function reactionBarHtml(id) {
+  const all = getReactions(id);
+  const mine = getMyReactions(id);
+  return `<div class="d-flex gap-1 reaction-bar mt-2" data-react="${id}">${REACTIONS.map(
+    (e) =>
+      `<button type="button" class="btn btn-sm btn-outline-secondary reaction-btn ${mine.includes(e) ? "active" : ""}" data-emoji="${e}">${e} <span class="reaction-count">${all[e] || 0}</span></button>`,
+  ).join("")}</div>`;
+}
+function initReactions() {
+  document.querySelectorAll("#menuGrid .col").forEach((col) => {
+    const btn = col.querySelector("[data-add]");
+    if (!btn) return;
+    const id = btn.dataset.add;
+    const footer = col.querySelector(".mt-auto");
+    if (footer && !footer.querySelector(".reaction-bar"))
+      footer.insertAdjacentHTML("beforeend", reactionBarHtml(id));
+  });
+  document.querySelectorAll(".blog-card").forEach((card) => {
+    const back = card.querySelector(".blog-card-back .p-4");
+    if (back && !back.querySelector(".reaction-bar"))
+      back.insertAdjacentHTML("beforeend", reactionBarHtml(card.id));
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   renderChrome();
   if (typeof Cart !== "undefined") Cart.init();
   initAncestraMotion();
   initHeroVideo();
   initPageTransition();
+  // reactions after menu/blog render
+  setTimeout(initReactions, 0);
+});
+document.body.addEventListener("click", (e) => {
+  const b = e.target.closest(".reaction-btn");
+  if (!b) return;
+  const bar = b.closest("[data-react]");
+  if (!bar) return;
+  const id = bar.dataset.react;
+  const emoji = b.dataset.emoji;
+  toggleReaction(id, emoji);
+  const all = getReactions(id);
+  const mine = getMyReactions(id);
+  b.classList.toggle("active", mine.includes(emoji));
+  const count = b.querySelector(".reaction-count");
+  if (count) count.textContent = all[emoji] || 0;
 });

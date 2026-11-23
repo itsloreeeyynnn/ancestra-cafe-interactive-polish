@@ -327,6 +327,9 @@ section {
   padding: 1.75rem;
   box-shadow: 0 14px 34px rgba(43, 77, 110, 0.35);
 }
+.loyalty-card .display-font {
+  color: #fff;
+}
 .stamp-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -1501,10 +1504,23 @@ a:hover {
   background: #284484;
   border-color: #284484;
 }
+.menu-item-unavailable {
+  opacity: 0.55;
+  filter: grayscale(0.6);
+}
+.menu-item-unavailable .menu-tile img {
+  filter: grayscale(1);
+}
+.menu-item-unavailable .fav-btn {
+  pointer-events: none;
+}
 .loyalty-card {
   border-radius: 12px;
   background: #284484;
   box-shadow: none;
+}
+.loyalty-card .display-font {
+  color: #fff;
 }
 .voucher {
   border-radius: 8px;
@@ -1991,6 +2007,212 @@ html {
   .reading-progress span {
     will-change: auto;
   }
+}
+.reaction-btn.active {
+  background: #284484;
+  color: #fff;
+  border-color: #284484;
+}
+/* Compact menu cards so category artwork stays readable */
+#menuGrid .menu-tile {
+  height: 120px;
+  aspect-ratio: auto;
+  background: #f0ebe3;
+}
+#menuGrid .menu-tile img {
+  object-fit: contain;
+  padding: 0.5rem;
+}
+#menuGrid .card-soft {
+  padding: 0.5rem !important;
+}
+#menuGrid .card-soft h3.h5 {
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+#menuGrid .card-soft p.small {
+  font-size: 0.78rem;
+  margin-bottom: 0.25rem;
+}
+#menuGrid .price {
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+#menuGrid .mt-auto {
+  gap: 0.5rem;
+}
+#menuGrid .btn-sm {
+  font-size: 0.6rem;
+  padding: 0.3rem 0.6rem;
+}
+/* Dark mode (best-effort) */
+body.dark-mode {
+  background: #151a24;
+  color: #e6e6e6;
+}
+body.dark-mode .card-soft,
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+  background: #1f2633;
+  color: #e6e6e6;
+  border-color: #333b4d;
+}
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode p,
+body.dark-mode .text-muted-2 {
+  color: #e6e6e6 !important;
+}
+body.dark-mode .site-nav {
+  background: #0f1420 !important;
+}
+body.dark-mode .page-hero {
+  background: #151a24 !important;
+}
+/* Comprehensive dark mode overrides */
+body.dark-mode,
+body.dark-mode .bg-paper,
+body.dark-mode .bg-sky,
+body.dark-mode .section-pad {
+  background-color: #151a24 !important;
+  color: #e6e6e6 !important;
+}
+body.dark-mode * {
+  color: #e6e6e6;
+}
+body.dark-mode a {
+  color: #9bbcff !important;
+}
+body.dark-mode a:hover {
+  color: #c7d9ff !important;
+}
+body.dark-mode .card-soft,
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode .modal-content,
+body.dark-mode .table {
+  background: #1f2633 !important;
+  color: #e6e6e6 !important;
+  border-color: #333b4d !important;
+}
+body.dark-mode .site-footer {
+  background: #0f1420 !important;
+}
+body.dark-mode .site-nav {
+  background: #0f1420 !important;
+}
+body.dark-mode .btn-blue,
+body.dark-mode .btn-outline-blue {
+  color: #fff !important;
+}
+body.dark-mode .text-muted-2 {
+  color: #a0a8b8 !important;
+}
+body.dark-mode img {
+  filter: none;
+}
+body.dark-mode .menu-tile {
+  background: #2a3142 !important;
+}
+body.dark-mode .voucher,
+body.dark-mode .loyalty-card {
+  background: #1f2633 !important;
+}
+/* Blog cards & FAQ accordion in dark mode */
+body.dark-mode .blog-card-inner,
+body.dark-mode .blog-card-face {
+  background: #1f2633 !important;
+  border-color: #333b4d !important;
+}
+/* craving finder (home) dark mode */
+body.dark-mode .craving-finder {
+  background: #1a2030 !important;
+}
+body.dark-mode .craving-option {
+  background: rgba(31, 38, 51, 0.72) !important;
+  border-color: #333b4d !important;
+  color: #e6e6e6 !important;
+}
+body.dark-mode .craving-option:hover,
+body.dark-mode .craving-option:focus-visible {
+  background: #262f40 !important;
+  color: #e6e6e6 !important;
+}
+body.dark-mode .craving-intro h2,
+body.dark-mode .craving-name {
+  color: #e6e6e6 !important;
+}
+body.dark-mode .craving-icon {
+  background: #2a3142 !important;
+  color: #9bbcff !important;
+}
+body.dark-mode .accordion-item,
+body.dark-mode .accordion-button,
+body.dark-mode .accordion-body {
+  background: #1f2633 !important;
+  color: #e6e6e6 !important;
+  border-color: #333b4d !important;
+}
+body.dark-mode .accordion-button:not(.collapsed) {
+  background: #262f40 !important;
+  color: #e6e6e6 !important;
+}
+body.dark-mode .accordion-button::after {
+  filter: invert(1);
+}
+body.dark-mode .modal-content {
+  background: #1f2633 !important;
+  color: #e6e6e6 !important;
+}
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  border-color: #333b4d !important;
+}
+/* Bootstrap contextual + surfaces in dark mode */
+body.dark-mode .bg-light,
+body.dark-mode .bg-white,
+body.dark-mode .bg-body {
+  background-color: #1f2633 !important;
+}
+body.dark-mode .text-success { color: #6fcf97 !important; }
+body.dark-mode .text-danger { color: #ff8a8a !important; }
+body.dark-mode .text-warning { color: #ffd166 !important; }
+body.dark-mode .text-info { color: #7dd3fc !important; }
+body.dark-mode .text-primary { color: #9bbcff !important; }
+body.dark-mode .badge.text-bg-light,
+body.dark-mode .badge.text-bg-secondary {
+  background-color: #333b4d !important;
+  color: #e6e6e6 !important;
+}
+body.dark-mode .table > :not(caption) > * > * {
+  background-color: #1f2633 !important;
+  color: #e6e6e6 !important;
+  border-color: #333b4d !important;
+}
+body.dark-mode .table-striped > tbody > tr:nth-of-type(odd) > * {
+  background-color: #262f40 !important;
+}
+body.dark-mode .form-control::placeholder {
+  color: #8a93a6 !important;
+}
+body.dark-mode .modal-backdrop {
+  opacity: 0.7 !important;
+}
+body.dark-mode .offcanvas {
+  background: #1f2633 !important;
+  color: #e6e6e6 !important;
+}
+body.dark-mode .dropdown-menu {
+  background: #1f2633 !important;
+  color: #e6e6e6 !important;
+}
+body.dark-mode .list-group-item {
+  background: #1f2633 !important;
+  color: #e6e6e6 !important;
+  border-color: #333b4d !important;
 }
 
 /* Quiet refinement: fewer moving parts, more space for the photography. */

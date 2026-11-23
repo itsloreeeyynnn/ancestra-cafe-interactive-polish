@@ -1,5 +1,14 @@
 /* Admin dashboard: reservations, orders, reviews (front-end demo only) */
 const ADMIN_PASSWORD = "admin123"; // demo only – a real site would verify on a server
+function downloadCsv(rows, filename) {
+  const q = (v) => `"${String(v).replace(/"/g, '""')}"`;
+  const blob = new Blob([rows.map((r) => r.map(q).join(",")).join("\n")], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 const fmtDate = (iso) =>
   new Date(iso).toLocaleString("en-PH", {
     dateStyle: "medium",
@@ -33,9 +42,9 @@ function renderOverview(res, orders, reviews) {
     ? (visible.reduce((s, r) => s + r.rating, 0) / visible.length).toFixed(1)
     : "–";
   const cards = [
-    ["bi-calendar-check", "Demo reservations", res.length],
-    ["bi-bag", "Demo orders", orders.length],
-    ["bi-cash-coin", "Demo order total", Peso(revenue)],
+    ["bi-calendar-check", "Reservations", res.length],
+    ["bi-bag", "Orders", orders.length],
+    ["bi-cash-coin", "Order total", Peso(revenue)],
     ["bi-star", "Avg rating", avg],
   ];
   document.getElementById("statCards").innerHTML = cards
@@ -77,18 +86,82 @@ function renderOverview(res, orders, reviews) {
     : '<li class="list-unstyled text-muted-2">No sales yet.</li>';
 }
 
-function renderAll() {
-  const res = Store.get("reservations", []);
-  const orders = Store.get("orders", []);
-  const reviews = getReviews();
+function drawCharts(res, orders) {
+  // status chart
+  const c1 = document.getElementById("statusChart");
+  if (c1) {
+    const ctx = c1.getContext("2d");
+    ctx.clearRect(0, 0, c1.width, c1.height);
+    const statuses = Object.keys(ORD_BADGE);
+    const counts = statuses.map((s) => orders.filter((o) => o.status === s).length);
+    const max = Math.max(1, ...counts);
+    const barW = c1.width / statuses.length - 8;
+    statuses.forEach((s, i) => {
+      const h = (counts[i] / max) * (c1.height - 30);
+      const x = i * (barW + 8) + 4;
+      const y = c1.height - h - 20;
+      ctx.fillStyle = "#284484";
+      ctx.fillRect(x, y, barW, h);
+      ctx.fillStyle = "#284484";
+      ctx.font = "10px Arial";
+      ctx.fillText(s, x, c1.height - 6);
+    });
+  }
+  // top items chart
+  const c2 = document.getElementById("topChart");
+  if (c2) {
+    const ctx = c2.getContext("2d");
+    ctx.clearRect(0, 0, c2.width, c2.height);
+    const totals = {};
+    orders
+      .filter((o) => o.status !== "Cancelled")
+      .forEach((o) => o.items.forEach((i) => (totals[i.name] = (totals[i.name] || 0) + i.qty)));
+    const top = Object.entries(totals).sort((a, b) => b[1] - a[1]).slice(0, 5);
+    const max = Math.max(1, ...top.map((t) => t[1]));
+    const barH = c2.height / Math.max(1, top.length) - 6;
+    top.forEach(([name, q], i) => {
+      const w = (q / max) * (c2.width - 90);
+      const y = i * (barH + 6);
+      ctx.fillStyle = "#284484";
+      ctx.fillRect(90, y, w, barH);
+      ctx.fillStyle = "#284484";
+      ctx.font = "10px Arial";
+      ctx.fillText(name.slice(0, 12), 4, y + barH / 2 + 3);
+    });
+  }
+}
 
-  document.getElementById("resBadge").textContent = res.filter(
+function renderAll() {
+  const resAll = Store.get("reservations", []);
+  const ordersAll = Store.get("orders", []);
+  const reviewsAll = getReviews();
+  const resQ = (document.getElementById("resSearch")?.value || "").toLowerCase();
+  const ordQ = (document.getElementById("ordSearch")?.value || "").toLowerCase();
+  const revQ = (document.getElementById("revSearch")?.value || "").toLowerCase();
+  const menuQ = (document.getElementById("menuSearch")?.value || "").toLowerCase();
+  const res = resQ
+    ? resAll.filter((r) =>
+        (r.name + r.phone + r.id + r.date + r.occasion).toLowerCase().includes(resQ),
+      )
+    : resAll;
+  const orders = ordQ
+    ? ordersAll.filter((o) =>
+        (o.name + o.id + o.items.map((i) => i.name).join(" ")).toLowerCase().includes(ordQ),
+      )
+    : ordersAll;
+  const reviews = revQ
+    ? reviewsAll.filter((r) =>
+        (r.name + r.text + (r.dish || "")).toLowerCase().includes(revQ),
+      )
+    : reviewsAll;
+
+  document.getElementById("resBadge").textContent = resAll.filter(
     (r) => r.status === "Pending",
   ).length;
-  document.getElementById("ordBadge").textContent = orders.filter(
+  document.getElementById("ordBadge").textContent = ordersAll.filter(
     (o) => o.status === "Pending",
   ).length;
-  renderOverview(res, orders, reviews);
+  renderOverview(resAll, ordersAll, reviewsAll);
 
   document.getElementById("resBody").innerHTML = res.length
     ? res
@@ -115,7 +188,7 @@ function renderAll() {
     <tr><td><span class="code-chip">${o.id}</span><div class="small text-muted-2">${fmtDate(o.date)}</div></td>
       <td>${escapeHtml(o.name)}<div class="small text-muted-2">${o.type}</div></td>
       <td class="small">${o.items.map((i) => `${i.qty}× ${escapeHtml(i.name)}`).join("<br>")}${o.note ? `<div class="text-muted-2 fst-italic">“${escapeHtml(o.note)}”</div>` : ""}</td>
-      <td>${Peso(o.total)}${o.voucher ? `<div class="small text-success">${o.voucher}</div>` : ""}</td>
+      <td>${Peso(o.total)}${o.voucher ? `<div class="small text-success">${o.voucher}</div>` : ""}${o.pointsEarned ? `<div class="small text-muted-2">+${o.pointsEarned} pts</div>` : ""}</td>
       <td><select class="form-select form-select-sm" data-ord="${o.id}" aria-label="Order status">
         ${Object.keys(ORD_BADGE)
           .map(
@@ -133,7 +206,7 @@ function renderAll() {
         (r) => `
     <tr><td>${escapeHtml(r.name)}<div class="small text-muted-2">${fmtDate(r.date)}</div></td>
       <td class="stars text-nowrap">${starString(r.rating)}</td>
-      <td class="small">${escapeHtml(r.text)}</td>
+      <td class="small">${escapeHtml(r.text)}${r.reply ? `<div class="text-muted-2 fst-italic mt-1">Reply: ${escapeHtml(r.reply)}</div>` : ""}<div class="mt-1"><input class="form-control form-control-sm" placeholder="Reply…" data-rev-reply="${r.id}"></div></td>
       <td><span class="badge text-bg-${r.hidden ? "secondary" : "success"}">${r.hidden ? "Hidden" : "Visible"}</span></td>
       <td class="text-end text-nowrap">
         <button class="btn btn-sm btn-outline-secondary" data-rev-toggle="${r.id}" title="${r.hidden ? "Show" : "Hide"}"><i class="bi ${r.hidden ? "bi-eye" : "bi-eye-slash"}"></i></button>
@@ -141,6 +214,38 @@ function renderAll() {
       )
       .join("") ||
     '<tr><td colspan="5" class="text-center text-muted-2 py-4">No reviews.</td></tr>';
+
+  // menu availability
+  const disabled = Store.get("disabledItems", []);
+  const menuItems = MENU.filter((m) =>
+    !menuQ || (m.name + m.cat).toLowerCase().includes(menuQ),
+  );
+  document.getElementById("menuBody").innerHTML = menuItems
+    .map(
+      (m) => `
+    <tr><td>${escapeHtml(m.name)}</td><td>${escapeHtml(m.cat)}</td><td>${Peso(m.price)}</td>
+      <td><div class="form-check form-switch"><input class="form-check-input" type="checkbox" data-menu-toggle="${m.id}" ${disabled.includes(m.id) ? "" : "checked"}></div></td></tr>`,
+    )
+    .join("") ||
+    '<tr><td colspan="4" class="text-center text-muted-2 py-4">No items.</td></tr>';
+
+  // gallery
+  const photos = Store.get("galleryPhotos", []);
+  document.getElementById("galleryBody").innerHTML = photos.length
+    ? photos
+        .map(
+          (p) => `
+    <tr><td><img src="${p.dataUrl}" style="width:48px;height:48px;object-fit:cover;border-radius:6px" alt=""></td>
+      <td>${escapeHtml(p.name)}</td><td class="small">${escapeHtml(p.caption || "")}</td>
+      <td><span class="badge text-bg-${p.hidden ? "secondary" : "success"}">${p.hidden ? "Hidden" : "Visible"}</span></td>
+      <td class="text-end text-nowrap">
+        <button class="btn btn-sm btn-outline-secondary" data-gal-toggle="${p.id}"><i class="bi ${p.hidden ? "bi-eye" : "bi-eye-slash"}"></i></button>
+        <button class="btn btn-sm btn-outline-danger" data-gal-del="${p.id}"><i class="bi bi-trash"></i></button></td></tr>`,
+        )
+        .join("")
+    : '<tr><td colspan="5" class="text-center text-muted-2 py-4">No photos.</td></tr>';
+
+  drawCharts(resAll, ordersAll);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -151,6 +256,10 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ignore */
   }
   showDash(authed);
+  ["resSearch", "ordSearch", "revSearch", "menuSearch"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", () => renderAll());
+  });
 
   document.getElementById("loginForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -199,9 +308,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const od = e.target.closest("[data-ord-del]");
     if (od && confirm("Delete this order?")) {
+      const allOrders = Store.get("orders", []);
+      const o = allOrders.find((x) => x.id === od.dataset.ordDel);
+      if (o && !o.pointsReversed && o.pointsEarned && o.memberPhone) {
+        const m = normalizeMember(Store.get("member", null));
+        if (m && m.phone === o.memberPhone) {
+          m.points = Math.max(0, m.points - o.pointsEarned);
+          Store.set("member", m);
+        }
+        o.pointsReversed = true;
+      }
       Store.set(
         "orders",
-        Store.get("orders", []).filter((x) => x.id !== od.dataset.ordDel),
+        allOrders.filter((x) => x.id !== od.dataset.ordDel),
       );
       renderAll();
       return;
@@ -224,16 +343,79 @@ document.addEventListener("DOMContentLoaded", () => {
         getReviews().filter((x) => x.id !== rv.dataset.revDel),
       );
       renderAll();
+      return;
+    }
+    const gt = e.target.closest("[data-gal-toggle]");
+    if (gt) {
+      const photos = Store.get("galleryPhotos", []);
+      const p = photos.find((x) => x.id === gt.dataset.galToggle);
+      if (p) {
+        p.hidden = !p.hidden;
+        Store.set("galleryPhotos", photos);
+        renderAll();
+      }
+      return;
+    }
+    const gd = e.target.closest("[data-gal-del]");
+    if (gd && confirm("Delete this photo?")) {
+      Store.set(
+        "galleryPhotos",
+        Store.get("galleryPhotos", []).filter((x) => x.id !== gd.dataset.galDel),
+      );
+      renderAll();
+      return;
     }
   });
 
   document.getElementById("dashView").addEventListener("change", (e) => {
+    const mt = e.target.closest("[data-menu-toggle]");
+    if (mt) {
+      const disabled = Store.get("disabledItems", []);
+      const id = mt.dataset.menuToggle;
+      if (mt.checked) {
+        const idx = disabled.indexOf(id);
+        if (idx !== -1) disabled.splice(idx, 1);
+      } else {
+        if (!disabled.includes(id)) disabled.push(id);
+      }
+      Store.set("disabledItems", disabled);
+      renderAll();
+      return;
+    }
+    const rr = e.target.closest("[data-rev-reply]");
+    if (rr) {
+      const reviews = getReviews();
+      const r = reviews.find((x) => x.id === rr.dataset.revReply);
+      if (r) {
+        r.reply = rr.value;
+        Store.set("reviews", reviews);
+      }
+      return;
+    }
     const sel = e.target.closest("[data-ord]");
     if (!sel) return;
     const orders = Store.get("orders", []);
     const o = orders.find((x) => x.id === sel.dataset.ord);
     if (o) {
+      const prev = o.status;
       o.status = sel.value;
+      if (sel.value === "Ready" && "Notification" in window && Notification.permission === "granted") {
+        new Notification("Order ready", { body: `${o.id} for ${o.name} is ready for pickup.` });
+      }
+      if (
+        sel.value === "Cancelled" &&
+        prev !== "Cancelled" &&
+        !o.pointsReversed &&
+        o.pointsEarned &&
+        o.memberPhone
+      ) {
+        const m = normalizeMember(Store.get("member", null));
+        if (m && m.phone === o.memberPhone) {
+          m.points = Math.max(0, m.points - o.pointsEarned);
+          Store.set("member", m);
+        }
+        o.pointsReversed = true;
+      }
       Store.set("orders", orders);
       renderAll();
       toast(`Order ${o.id} → ${o.status}`);
@@ -245,7 +427,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!orders.length) return toast("No orders to export.", "warning");
     const q = (v) => `"${String(v).replace(/"/g, '""')}"`;
     const rows = [
-      ["Order", "Date", "Customer", "Type", "Items", "Total", "Status"],
+      ["Order", "Date", "Customer", "Type", "Items", "Total", "Points Earned", "Status"],
       ...orders.map((o) => [
         o.id,
         o.date,
@@ -253,6 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
         o.type,
         o.items.map((i) => `${i.qty}x ${i.name}`).join("; "),
         o.total,
+        o.pointsEarned || 0,
         o.status,
       ]),
     ];
@@ -261,10 +444,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "ancestra-demo-orders.csv";
+    a.download = "ancestra-orders.csv";
     a.click();
     URL.revokeObjectURL(a.href);
   });
+  const exportResBtn = document.getElementById("exportResBtn");
+  if (exportResBtn)
+    exportResBtn.addEventListener("click", () => {
+      const rows = [
+        ["Ref", "Name", "Phone", "Date", "Time", "Guests", "Status"],
+        ...Store.get("reservations", []).map((r) => [r.id, r.name, r.phone, r.date, r.timeLabel, r.guests, r.status]),
+      ];
+      downloadCsv(rows, "ancestra-reservations.csv");
+    });
+  const exportRevBtn = document.getElementById("exportRevBtn");
+  if (exportRevBtn)
+    exportRevBtn.addEventListener("click", () => {
+      const rows = [
+        ["Name", "Rating", "Dish", "Review", "Date", "Hidden"],
+        ...getReviews().map((r) => [r.name, r.rating, r.dish || "", r.text, r.date, r.hidden]),
+      ];
+      downloadCsv(rows, "ancestra-reviews.csv");
+    });
 
   document.getElementById("resetDemo").addEventListener("click", () => {
     if (
@@ -293,6 +494,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     Cart.render();
     renderAll();
-    toast("Demo data cleared.", "secondary");
+    toast("Data cleared.", "secondary");
   });
 });
