@@ -1,4 +1,4 @@
-const CACHE = "ancestra-final-v3";
+const CACHE = "ancestra-header-v4";
 const ASSETS = [
   "./",
   "./index.html",

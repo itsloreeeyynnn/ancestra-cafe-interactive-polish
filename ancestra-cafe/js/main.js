@@ -41,11 +41,10 @@ const escapeHtml = (s) =>
 const todayISO = () => new Date().toISOString().slice(0, 10);
 
 /* ---------- Points-based rewards ---------- */
-const POINTS_DIVISOR = 10;        // pesos spent per 1 point earned
-const FREE_DRINK_POINTS = 135;    // points needed for one free drink
-const STAMP_TO_POINTS = 15;       // migration: 1 old stamp = 15 points
-const pointsForAmount = (amount) =>
-  Math.floor(Number(amount) / POINTS_DIVISOR);
+const POINTS_DIVISOR = 10; // pesos spent per 1 point earned
+const FREE_DRINK_POINTS = 135; // points needed for one free drink
+const STAMP_TO_POINTS = 15; // migration: 1 old stamp = 15 points
+const pointsForAmount = (amount) => Math.floor(Number(amount) / POINTS_DIVISOR);
 
 function normalizeMember(m) {
   if (!m) return null;
@@ -54,14 +53,34 @@ function normalizeMember(m) {
     else m.points = 0;
   }
   if (typeof m.lifetimePoints !== "number") m.lifetimePoints = m.points;
-  if (!m.referralCode) m.referralCode = "ANCESTRA-" + Math.random().toString(36).slice(2, 6).toUpperCase();
+  if (!m.referralCode)
+    m.referralCode =
+      "ANCESTRA-" + Math.random().toString(36).slice(2, 6).toUpperCase();
   delete m.stamps;
   return m;
 }
 const REWARDS = [
-  { id: "rw1", title: "Free Drink", points: 135, desc: "Any menu drink without add-ons", filter: (m) => m.group === "drink" },
-  { id: "rw2", title: "Free Frappe / Pastry", points: 500, desc: "One ice-blended drink or sandwich", filter: (m) => m.cat === "Ice Blended" || m.cat === "Sandwiches" },
-  { id: "rw3", title: "Free Meal Combo", points: 1000, desc: "One main plus a drink", filter: (m) => m.group === "food" },
+  {
+    id: "rw1",
+    title: "Free Drink",
+    points: 135,
+    desc: "Any menu drink without add-ons",
+    filter: (m) => m.group === "drink",
+  },
+  {
+    id: "rw2",
+    title: "Free Frappe / Pastry",
+    points: 500,
+    desc: "One ice-blended drink or sandwich",
+    filter: (m) => m.cat === "Ice Blended" || m.cat === "Sandwiches",
+  },
+  {
+    id: "rw3",
+    title: "Free Meal Combo",
+    points: 1000,
+    desc: "One main plus a drink",
+    filter: (m) => m.group === "food",
+  },
 ];
 function tierFor(points) {
   if (points >= 1500) return "Gold";
@@ -138,9 +157,10 @@ function toast(message, variant = "success") {
 }
 
 /* ---------- Site chrome ----------
-   Navigation follows the reference site's structure: five main pages
-   (Home, About, Menu, Blog, Contact), a centered logo and social icons.
-   The extra features live inside those pages (see README). */
+   Header layout: wordmark left, evenly spaced links centered, utility
+   buttons (socials, dark mode, cart) grouped on the right. Below 1400px the
+   secondary pages collapse into a "More" dropdown so the row never crowds
+   the logo. The extra features live inside those pages (see README). */
 const NAV_LINKS = [
   ["index.html", "Home", "home"],
   ["about.html", "About", "about"],
@@ -149,19 +169,36 @@ const NAV_LINKS = [
   ["contact.html", "Contact", "contact"],
   ["experience.html", "Rewards", "experience"],
   ["gallery.html", "Gallery", "gallery"],
-  ["faq.html", "FAQ & Reviews", "faq"],
+  ["faq.html", "FAQ", "faq"],
 ];
+/* Pages that move into the "More" dropdown on narrower screens. */
+const NAV_SECONDARY = ["about", "blog", "contact"];
 
 function renderChrome() {
   const page = document.body.dataset.page;
-  const links = NAV_LINKS.map(
-    ([href, label, key]) =>
-      `<li class="nav-item">
-        <a class="nav-link ${key === page ? "active" : ""}" ${key === page ? 'aria-current="page"' : ""} href="${href}">
-          ${label}
-        </a>
-      </li>`,
-  ).join("");
+  const isActive = (key) => key === page;
+
+  const navItem = ([href, label, key], extraClass = "") =>
+    `<li class="nav-item ${extraClass}">
+      <a class="nav-link ${isActive(key) ? "active" : ""}" ${isActive(key) ? 'aria-current="page"' : ""} href="${href}">${label}</a>
+    </li>`;
+
+  const dropdownItem = ([href, label, key]) =>
+    `<li><a class="dropdown-item ${isActive(key) ? "active" : ""}" ${isActive(key) ? 'aria-current="page"' : ""} href="${href}">${label}</a></li>`;
+
+  const primary = NAV_LINKS.filter(([, , key]) => !NAV_SECONDARY.includes(key));
+  const secondary = NAV_LINKS.filter(([, , key]) => NAV_SECONDARY.includes(key));
+  const moreIsActive = secondary.some(([, , key]) => isActive(key));
+
+  const links =
+    primary.map((link) => navItem(link)).join("") +
+    secondary.map((link) => navItem(link, "nav-item-limited")).join("") +
+    `<li class="nav-item dropdown nav-item-more">
+      <button class="nav-link dropdown-toggle ${moreIsActive ? "active" : ""}" type="button" data-bs-toggle="dropdown" aria-expanded="false">More</button>
+      <ul class="dropdown-menu dropdown-menu-end">${secondary
+        .map((link) => dropdownItem(link))
+        .join("")}</ul>
+    </li>`;
 
   const header = document.getElementById("site-header");
   if (header)
@@ -175,20 +212,20 @@ function renderChrome() {
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <ul class="navbar-nav mb-2 mb-lg-0">
             ${links}
           </ul>
-          <div class="d-flex align-items-center gap-2 nav-right">
-            <a class="nav-social" href="https://www.instagram.com/ancestracafe/" target="_blank" rel="noopener" aria-label="Ancestra Cafe Instagram">
+          <div class="nav-utils">
+            <a class="nav-icon-btn" href="https://www.instagram.com/ancestracafe/" target="_blank" rel="noopener" aria-label="Ancestra Cafe Instagram">
               <i class="bi bi-instagram"></i>
             </a>
-            <a class="nav-social" href="https://www.facebook.com/profile.php?id=61574579534127" target="_blank" rel="noopener" aria-label="Ancestra Cafe Facebook">
+            <a class="nav-icon-btn" href="https://www.facebook.com/profile.php?id=61574579534127" target="_blank" rel="noopener" aria-label="Ancestra Cafe Facebook">
               <i class="bi bi-facebook"></i>
             </a>
-            <button class="btn btn-outline-blue btn-sm ms-1" type="button" id="darkModeBtn" aria-label="Toggle dark mode">
+            <button class="nav-icon-btn" type="button" id="darkModeBtn" aria-label="Toggle dark mode">
               <i class="bi bi-moon"></i>
             </button>
-            <button class="btn btn-outline-blue btn-sm cart-btn ms-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas" aria-label="Open cart">
+            <button class="nav-icon-btn cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartCanvas" aria-label="Open cart">
               <i class="bi bi-bag"></i>
               <span class="badge rounded-pill cart-badge" id="cartBadge" aria-live="polite" aria-atomic="true">0</span>
             </button>
@@ -201,7 +238,7 @@ function renderChrome() {
     footer.innerHTML = `<footer class="site-footer text-center"><div class="container">
       <img src="images/Lettermark+02.png" alt="Ancestra Cafe official wordmark" class="footer-wordmark mb-3">
       <p class="mb-3">A coffee shop for community, where heritage is celebrated.</p>
-      <ul class="list-inline footer-links mb-3"><li class="list-inline-item"><a href="about.html">About</a></li><li class="list-inline-item"><a href="menu.html">Menu</a></li><li class="list-inline-item"><a href="blog.html?post=policies">Guest Policies</a></li><li class="list-inline-item"><a href="contact.html">Contact</a></li><li class="list-inline-item"><a href="experience.html">Rewards &amp; Reviews</a></li><li class="list-inline-item"><a href="gallery.html">Gallery</a></li><li class="list-inline-item"><a href="faq.html">FAQ &amp; Reviews</a></li><li class="list-inline-item"><a href="admin.html">Admin</a></li></ul>
+      <ul class="list-inline footer-links mb-3"><li class="list-inline-item"><a href="about.html">About</a></li><li class="list-inline-item"><a href="menu.html">Menu</a></li><li class="list-inline-item"><a href="blog.html?post=policies">Guest Policies</a></li><li class="list-inline-item"><a href="contact.html">Contact</a></li><li class="list-inline-item"><a href="experience.html">Rewards</a></li><li class="list-inline-item"><a href="gallery.html">Gallery</a></li><li class="list-inline-item"><a href="faq.html">FAQ &amp; Reviews</a></li><li class="list-inline-item"><a href="admin.html">Admin</a></li></ul>
       <div class="social mb-3"><a href="https://www.instagram.com/ancestracafe/" target="_blank" rel="noopener" aria-label="Instagram"><i class="bi bi-instagram"></i></a><a href="https://www.facebook.com/profile.php?id=61574579534127" target="_blank" rel="noopener" aria-label="Facebook"><i class="bi bi-facebook"></i></a></div>
       <hr>
       <p class="footer-note">© Ancestra Cafe — reproduced from the café's public website for an ITE17 academic project. Ordering, loyalty, voucher, review, reservation and admin tools are student-project features only.</p>
@@ -294,7 +331,10 @@ function initGlobalUX() {
   const darkBtn = document.getElementById("darkModeBtn");
   const applyDark = (on) => {
     document.body.classList.toggle("dark-mode", on);
-    if (darkBtn) darkBtn.innerHTML = on ? '<i class="bi bi-sun"></i>' : '<i class="bi bi-moon"></i>';
+    if (darkBtn)
+      darkBtn.innerHTML = on
+        ? '<i class="bi bi-sun"></i>'
+        : '<i class="bi bi-moon"></i>';
   };
   applyDark(Store.get("darkMode", false));
   if (darkBtn)
@@ -422,7 +462,10 @@ function initOnboardingAndShortcuts() {
   document.addEventListener("keydown", (e) => {
     if (e.key === "?" && !e.ctrlKey && !e.metaKey && !e.altKey) {
       const target = e.target;
-      const typing = target && (target.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(target.tagName));
+      const typing =
+        target &&
+        (target.isContentEditable ||
+          /INPUT|TEXTAREA|SELECT/.test(target.tagName));
       if (typing) return;
       e.preventDefault();
       new bootstrap.Modal(document.getElementById("shortcutsModal")).show();
