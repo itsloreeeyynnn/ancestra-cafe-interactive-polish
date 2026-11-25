@@ -399,6 +399,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (o) {
       const prev = o.status;
       o.status = sel.value;
+      o.statusHistory = o.statusHistory || [{ status: prev || "Pending", date: o.date || new Date().toISOString() }];
+      if (prev !== sel.value) o.statusHistory.push({ status: sel.value, date: new Date().toISOString() });
       if (sel.value === "Ready" && "Notification" in window && Notification.permission === "granted") {
         new Notification("Order ready", { body: `${o.id} for ${o.name} is ready for pickup.` });
       }

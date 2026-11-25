@@ -1,0 +1,8 @@
+document.addEventListener("DOMContentLoaded", () => {
+ const form=document.getElementById("trackOrderForm"); if(!form)return;
+ const input=document.getElementById("trackOrderInput"), result=document.getElementById("trackOrderResult");
+ const stages=["Pending","Preparing","Ready","Completed"];
+ function show(id){const order=(Store.get("orders",[])||[]).find(o=>o.id.toLowerCase()===id.trim().toLowerCase()); if(!order){result.innerHTML='<p class="small text-danger mb-0">We could not find that order number in this browser.</p>';return;} const status=order.status||"Pending"; const idx=stages.indexOf(status); const history=order.statusHistory||[{status:"Pending",date:order.date}]; result.innerHTML=`<div class="border rounded-3 p-3"><div class="d-flex justify-content-between flex-wrap gap-2"><strong>Order ${escapeHtml(order.id)}</strong><span class="badge text-bg-primary">${escapeHtml(status)}</span></div><p class="small text-muted-2 mt-1 mb-3">${escapeHtml(order.type||"Order")} · ${new Date(order.date).toLocaleString()}</p><div class="order-steps">${stages.map((s,i)=>`<div class="order-step ${i<=idx?'is-done':''}"><span class="order-step-dot"></span><span>${s}</span></div>`).join('')}</div><hr><p class="small mb-1">${order.items.map(i=>`${i.qty} × ${escapeHtml(i.name)}`).join(' · ')}</p><strong>${Peso(order.total)}</strong><p class="small text-muted-2 mt-2 mb-0">${history.map(h=>`${escapeHtml(h.status)} · ${new Date(h.date).toLocaleString()}`).join('<br>')}</p></div>`;}
+ form.addEventListener("submit",e=>{e.preventDefault();show(input.value);});
+ const saved=Store.get("trackOrderId",""); if(saved){input.value=saved;show(saved);Store.set("trackOrderId","");}
+});

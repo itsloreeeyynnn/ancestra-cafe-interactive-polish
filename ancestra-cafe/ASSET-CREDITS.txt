@@ -1,0 +1,15 @@
+ANCESTRA CAFE WEBSITE — ASSET ACKNOWLEDGEMENTS
+
+Original website recreated: https://www.ancestracafe.ph/
+
+Brand photography and wordmark assets were sourced from the Ancestra Cafe website and are retained as visual references for this educational recreation.
+
+Menu reference photography (illustrative only; not verified photographs of Ancestra Cafe servings):
+- https://cdn.pixabay.com/photo/2011/04/29/11/20/spaghetti-7113_1280.jpg
+- https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg
+- https://cdn.pixabay.com/photo/2019/04/14/17/09/americano-4127162_1280.jpg
+- https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg
+- https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg
+- https://cdn.pixabay.com/photo/2022/06/07/20/52/curry-7249244_1280.jpg
+
+These external menu photos are illustrative references. Replace them with approved cafe product photographs when available. This project is an educational front-end recreation and is not affiliated with or operated by Ancestra Cafe.

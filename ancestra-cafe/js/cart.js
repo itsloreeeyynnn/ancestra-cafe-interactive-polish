@@ -50,7 +50,7 @@ function cartMarkup() {
           <div class="mb-3"><label class="form-label" for="coName">Name</label>
             <input class="form-control" id="coName" required minlength="2"><div class="invalid-feedback">Please enter your name.</div></div>
           <div class="mb-3"><label class="form-label" for="coType">Order type</label>
-            <select class="form-select" id="coType"><option>Dine-in</option><option>Pickup</option></select></div>
+            <select class="form-select" id="coType"><option>Dine-in</option><option>Takeout</option><option>Pickup</option></select></div>
            <div class="mb-3"><label class="form-label" for="coPickup">Pickup time</label>
              <select class="form-select" id="coPickup"></select></div>
           <div class="mb-3"><label class="form-label" for="coNote">Notes (optional)</label>
@@ -72,6 +72,7 @@ function cartMarkup() {
       <p class="small text-muted-2" id="orderDoneMsg"></p>
       <div class="d-flex gap-2 justify-content-center flex-wrap">
         <button class="btn btn-outline-blue" id="printReceiptBtn" type="button"><i class="bi bi-printer me-1"></i>Print receipt</button>
+        <button class="btn btn-outline-blue" id="trackOrderBtn" type="button"><i class="bi bi-truck me-1"></i>Track order</button>
         <button class="btn btn-outline-blue" id="reorderBtn" type="button"><i class="bi bi-arrow-repeat me-1"></i>Reorder</button>
         <button class="btn btn-blue" data-bs-dismiss="modal">Done</button>
       </div>
@@ -367,6 +368,13 @@ const Cart = {
         w.focus();
         w.print();
       });
+    const trackBtn = document.getElementById("trackOrderBtn");
+    if (trackBtn) trackBtn.addEventListener("click", () => {
+      const last = Store.get("lastOrder", null);
+      if (!last) return;
+      Store.set("trackOrderId", last.id);
+      window.location.href = "experience.html#order-tracking";
+    });
     const reorderBtn = document.getElementById("reorderBtn");
     if (reorderBtn)
       reorderBtn.addEventListener("click", () => {
@@ -499,6 +507,7 @@ const Cart = {
       voucher: info.ok ? info.voucher.code : null,
       total: this.total(),
       status: "Pending",
+      statusHistory: [{ status: "Pending", date: new Date().toISOString() }],
       date: new Date().toISOString(),
     };
     const orders = Store.get("orders", []);

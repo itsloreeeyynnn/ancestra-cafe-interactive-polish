@@ -1,4 +1,4 @@
-﻿/* Ancestra Cafe menu transcribed from the two menu-board images on ancestracafe.ph.
+/* Ancestra Cafe menu transcribed from the two menu-board images on ancestracafe.ph.
    Descriptions are copied/paraphrased from the board. This ordering/cart is a student-project demo. */
 const MENU = [
   // Coffee (hot / iced)
@@ -506,12 +506,26 @@ MENU.forEach((m) => {
     const t = [];
     if (m.group === "drink" || m.group === "addon") t.push("drink");
     else t.push("food");
-    if (!/chicken|beef|shrimp|pork|bacon|squid|mussels/.test(text)) t.push("vegetarian");
+
     if (/coffee|espresso|latte|mocha|cappuccino|americano|brew/.test(text)) t.push("caffeine");
     m.tags = t;
   }
   if (!Array.isArray(m.pairsWith)) m.pairsWith = [];
 });
+
+// Only items whose listed ingredients clearly fit a vegetarian diet are tagged.
+const VEGETARIAN_ITEM_IDS = new Set([
+  "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11",
+  "n1", "n2", "n3", "n4", "n5", "n6",
+  "i1", "i2", "i3", "i4", "i5", "i6", "i7",
+  "s2", "sd1", "sd2"
+]);
+MENU.forEach((item) => {
+  if (VEGETARIAN_ITEM_IDS.has(item.id) && !item.tags.includes("vegetarian")) {
+    item.tags.push("vegetarian");
+  }
+});
+
 /* Pairing suggestions */
 const PAIRS = {
   c1: ["s1", "sp2"],
@@ -548,7 +562,51 @@ const CATS = [
   "Mains",
   "Sides",
 ];
-/* Category artwork chosen by the user; coffee keeps the placeholder. */
+/* Product photography references selected to match the closest menu item. */
+const PHOTO_BY_ID = {
+  c1: "https://cdn.pixabay.com/photo/2019/04/14/17/09/americano-4127162_1280.jpg",
+  c2: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  c3: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  c4: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  c5: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  c6: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  c7: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  c8: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  c9: "https://cdn.pixabay.com/photo/2019/04/14/17/09/americano-4127162_1280.jpg",
+  c10: "https://cdn.pixabay.com/photo/2019/04/14/17/09/americano-4127162_1280.jpg",
+  c11: "https://cdn.pixabay.com/photo/2019/04/14/17/09/americano-4127162_1280.jpg",
+  n1: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
+  n2: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
+  n3: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
+  n4: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  n5: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
+  n6: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
+  i1: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  i2: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  i3: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
+  i4: "https://cdn.pixabay.com/photo/2022/06/07/20/52/curry-7249244_1280.jpg",
+  i5: "https://cdn.pixabay.com/photo/2022/06/07/20/52/curry-7249244_1280.jpg",
+  i6: "https://cdn.pixabay.com/photo/2022/06/07/20/52/curry-7249244_1280.jpg",
+  i7: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
+  s1: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
+  s2: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
+  s3: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
+  sp1: "https://cdn.jalan.jp/jalan/img/8/spot/0218/KL/guide000000218528_7.jpg",
+  sp2: "https://cdn.jalan.jp/jalan/img/8/spot/0218/KL/guide000000218528_7.jpg",
+  p1: "https://cdn.pixabay.com/photo/2011/04/29/11/20/spaghetti-7113_1280.jpg",
+  p2: "https://cdn.pixabay.com/photo/2011/04/29/11/20/spaghetti-7113_1280.jpg",
+  p3: "https://cdn.pixabay.com/photo/2011/04/29/11/20/spaghetti-7113_1280.jpg",
+  sa1: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
+  sa2: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
+  m1: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
+  m2: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
+  m3: "https://cdn.pixabay.com/photo/2022/06/07/20/52/curry-7249244_1280.jpg",
+  m4: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
+  m5: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
+  m6: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
+  sd1: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
+  sd2: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
+};
 const CAT_IMAGE = {
   Coffee: "images/menu/placeholder.png",
   "Non-Coffee": "images/menu/non-coffee.png",
@@ -560,7 +618,7 @@ const CAT_IMAGE = {
   Mains: "images/menu/mains.png",
   Sides: "images/menu/sidedish.png",
 };
-const catImage = (m) => CAT_IMAGE[m.cat] || m.image || "images/menu/placeholder.png";
+const catImage = (m) => PHOTO_BY_ID[m.id] || CAT_IMAGE[m.cat] || "images/menu/placeholder.png";
 const state = {
   q: "",
   cat: "All",
@@ -647,22 +705,33 @@ function openItemModal(id) {
   const content = document.getElementById("itemModalContent");
   if (!content) return;
   content.innerHTML = `
-    <div class="row g-3">
-      <div class="col-md-5"><img src="${escapeHtml(catImage(m))}" class="img-fluid rounded" alt="${escapeHtml(m.name)}" onerror="this.src='images/menu/placeholder.png'"></div>
+    <div class="row g-4 align-items-center">
+      <div class="col-md-5"><img src="${escapeHtml(catImage(m))}" class="img-fluid rounded-3 w-100" alt="${escapeHtml(m.name)}" style="max-height:340px;object-fit:cover" onerror="this.src='images/menu/placeholder.png'"></div>
       <div class="col-md-7">
-        <h3>${escapeHtml(m.name)}</h3>
+        <p class="eyebrow mb-1">${escapeHtml(m.cat)}</p><h3>${escapeHtml(m.name)}</h3>
         <p class="small text-muted-2">${escapeHtml(m.desc)}</p>
         ${m.serving ? `<p class="small text-muted-2">${escapeHtml(m.serving)}</p>` : ""}
-        <p class="mb-1"><strong>${Peso(m.price)}</strong></p>
-        <p class="small text-muted-2 mb-1">Calories: ~${m.calories} kcal · Allergens: ${m.allergens.join(", ")}</p>
-        <p class="small text-muted-2 mb-1">Tags: ${m.tags.join(", ")}</p>
-        ${pairs.length ? `<p class="small mb-2">Pairs well with: ${pairs.map((p) => escapeHtml(p.name)).join(", ")}</p>` : ""}
-        <div class="d-flex gap-2">
-          <button class="btn btn-blue btn-sm" data-add="${m.id}" data-bs-dismiss="modal">Add to cart</button>
-          <button class="btn btn-outline-blue btn-sm" data-bs-dismiss="modal">Close</button>
-        </div>
+        <p class="h5 mb-3" id="quickViewPrice">${Peso(m.price)}</p>
+        ${m.group === "drink" ? `<label class="form-label small" for="quickSize">Size</label><select class="form-select mb-3" id="quickSize"><option value="Regular" data-extra="0">Regular</option><option value="Large" data-extra="30">Large (+₱30)</option></select>` : ""}
+        <label class="form-label small" for="quickQty">Quantity</label><div class="input-group mb-3" style="max-width:150px"><button class="btn btn-outline-blue" type="button" id="quickMinus" aria-label="Decrease quantity">−</button><input class="form-control text-center" id="quickQty" type="number" min="1" max="20" value="1"><button class="btn btn-outline-blue" type="button" id="quickPlus" aria-label="Increase quantity">+</button></div>
+        <div class="d-flex gap-2 flex-wrap"><button class="btn btn-blue" id="quickAddBtn" type="button" data-item="${m.id}">Add to cart</button><button class="btn btn-outline-blue" type="button" data-bs-dismiss="modal">Close</button></div>
+        <p class="small text-muted-2 mt-3 mb-0">${m.allergens?.length ? `Allergens: ${m.allergens.join(", ")}` : "Ask our team about ingredients or dietary needs."}</p>
       </div>
     </div>`;
+  const size = content.querySelector('#quickSize');
+  const qty = content.querySelector('#quickQty');
+  const updatePrice = () => { const extra = Number(size?.selectedOptions[0]?.dataset.extra || 0); content.querySelector('#quickViewPrice').textContent = Peso(m.price + extra); };
+  size?.addEventListener('change', updatePrice);
+  content.querySelector('#quickMinus').addEventListener('click', () => qty.value = Math.max(1, Number(qty.value || 1) - 1));
+  content.querySelector('#quickPlus').addEventListener('click', () => qty.value = Math.min(20, Number(qty.value || 1) + 1));
+  content.querySelector('#quickAddBtn').addEventListener('click', () => {
+    const extra = Number(size?.selectedOptions[0]?.dataset.extra || 0);
+    const label = size ? size.value : '';
+    const item = { id: `${m.id}${label ? '-' + label.toLowerCase() : ''}`, baseId:m.id, name: `${m.name}${label ? ` (${label})` : ''}`, price:m.price + extra, emoji:m.emoji, group:m.group, qty: Math.max(1, Math.min(20, Number(qty.value || 1))) };
+    for (let i=0;i<item.qty;i++) Cart.add(item);
+    trackRecent(m.id);
+    bootstrap.Modal.getInstance(document.getElementById('itemModal')).hide();
+  });
   new bootstrap.Modal(document.getElementById("itemModal")).show();
 }
 function servingAvailable(m) {
@@ -687,12 +756,11 @@ function renderMenu() {
       const unavailable = !servingAvailable(m) || disabledItems.includes(m.id);
       const tile = `<div class="menu-tile ${TILE[m.cat]}" aria-hidden="true"><img src="${escapeHtml(catImage(m))}" alt="" loading="lazy" decoding="async" onerror="this.src='images/menu/placeholder.png';this.parentElement.classList.add('is-placeholder')"><span class="menu-tile-fallback">${m.emoji}</span></div>`;
       const addBtn = unavailable
-        ? `<button class="btn btn-blue btn-sm" data-add="${m.id}" disabled aria-disabled="true"><i class="bi bi-clock me-1"></i>Not yet</button>`
-        : `<button class="btn btn-blue btn-sm" data-add="${m.id}"><i class="bi bi-plus-lg me-1"></i>Add</button>`;
+        ? `<button class="btn btn-blue btn-sm" data-add="${m.id}" disabled aria-disabled="true">Not yet</button>`
+        : `<button class="btn btn-blue btn-sm" data-add="${m.id}">Add</button>`;
       return `<div class="col"><article class="card-soft hover-lift h-100 d-flex flex-column overflow-hidden ${unavailable ? "menu-item-unavailable" : ""}">${tile}<div class="p-3 d-flex flex-column flex-grow-1"><div class="d-flex justify-content-between align-items-start"><h3 class="h5 mb-1">${escapeHtml(m.name)}</h3><button class="fav-btn" data-fav="${m.id}" aria-label="${fav ? "Remove from" : "Add to"} favorites" aria-pressed="${fav}"><i class="bi ${fav ? "bi-heart-fill" : "bi-heart"}"></i></button></div><p class="small text-muted-2 mb-2 flex-grow-1">${escapeHtml(m.desc)}</p>${m.serving ? `<p class="small text-muted-2 mb-2"><span class="badge text-bg-secondary">${escapeHtml(m.serving)}</span></p>` : ""}<div class="d-flex justify-content-between align-items-center mt-auto"><span class="price">${Peso(m.price)}</span>${addBtn}</div></div></article></div>`;
     })
     .join("");
-  if (typeof initReactions === "function") initReactions();
 }
 function trackRecent(id) {
   let list = Store.get("recentlyViewed", []);

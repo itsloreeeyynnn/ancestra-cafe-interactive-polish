@@ -527,75 +527,10 @@ function initPageTransition() {
     });
 }
 
-const REACTIONS = ["☕", "❤️", "🔥"];
-function getReactions(id) {
-  const all = Store.get("reactions", {});
-  return (all && all[id]) || {};
-}
-function getMyReactions(id) {
-  const mine = Store.get("myReactions", {});
-  return (mine && mine[id]) || [];
-}
-function toggleReaction(id, emoji) {
-  const all = Store.get("reactions", {}) || {};
-  const mine = Store.get("myReactions", {}) || {};
-  if (!all[id]) all[id] = {};
-  if (!mine[id]) mine[id] = [];
-  const has = mine[id].includes(emoji);
-  if (has) {
-    all[id][emoji] = Math.max(0, (all[id][emoji] || 0) - 1);
-    mine[id] = mine[id].filter((e) => e !== emoji);
-  } else {
-    all[id][emoji] = (all[id][emoji] || 0) + 1;
-    mine[id].push(emoji);
-  }
-  Store.set("reactions", all);
-  Store.set("myReactions", mine);
-}
-function reactionBarHtml(id) {
-  const all = getReactions(id);
-  const mine = getMyReactions(id);
-  return `<div class="d-flex gap-1 reaction-bar mt-2" data-react="${id}">${REACTIONS.map(
-    (e) =>
-      `<button type="button" class="btn btn-sm btn-outline-secondary reaction-btn ${mine.includes(e) ? "active" : ""}" data-emoji="${e}">${e} <span class="reaction-count">${all[e] || 0}</span></button>`,
-  ).join("")}</div>`;
-}
-function initReactions() {
-  document.querySelectorAll("#menuGrid .col").forEach((col) => {
-    const btn = col.querySelector("[data-add]");
-    if (!btn) return;
-    const id = btn.dataset.add;
-    const footer = col.querySelector(".mt-auto");
-    if (footer && !footer.querySelector(".reaction-bar"))
-      footer.insertAdjacentHTML("beforeend", reactionBarHtml(id));
-  });
-  document.querySelectorAll(".blog-card").forEach((card) => {
-    const back = card.querySelector(".blog-card-back .p-4");
-    if (back && !back.querySelector(".reaction-bar"))
-      back.insertAdjacentHTML("beforeend", reactionBarHtml(card.id));
-  });
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   renderChrome();
   if (typeof Cart !== "undefined") Cart.init();
   initAncestraMotion();
   initHeroVideo();
   initPageTransition();
-  // reactions after menu/blog render
-  setTimeout(initReactions, 0);
-});
-document.body.addEventListener("click", (e) => {
-  const b = e.target.closest(".reaction-btn");
-  if (!b) return;
-  const bar = b.closest("[data-react]");
-  if (!bar) return;
-  const id = bar.dataset.react;
-  const emoji = b.dataset.emoji;
-  toggleReaction(id, emoji);
-  const all = getReactions(id);
-  const mine = getMyReactions(id);
-  b.classList.toggle("active", mine.includes(emoji));
-  const count = b.querySelector(".reaction-count");
-  if (count) count.textContent = all[emoji] || 0;
 });

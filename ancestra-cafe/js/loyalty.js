@@ -10,6 +10,8 @@ function renderCard() {
   document.getElementById("pointsCount").textContent = member.points;
   const filled = Math.min(member.points, 135);
   document.getElementById("pointsBar").style.width = (filled / 135) * 100 + "%";
+  const stamps = document.getElementById("loyaltyStamps");
+  if (stamps) { const count = Math.min(9, Math.floor(member.points / 15)); stamps.innerHTML = Array.from({length:9}, (_,i) => `<span class="loyalty-stamp ${i<count ? "is-filled" : ""}" title="${i<count ? "Earned" : "Not yet earned"}"><i class="bi ${i<count ? "bi-cup-hot-fill" : "bi-cup"}"></i></span>`).join(""); }
   const left = 135 - member.points;
   document.getElementById("rewardText").textContent =
     left > 0
