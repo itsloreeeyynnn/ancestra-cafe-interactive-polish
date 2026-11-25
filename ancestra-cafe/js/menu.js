@@ -562,51 +562,8 @@ const CATS = [
   "Mains",
   "Sides",
 ];
-/* Product photography references selected to match the closest menu item. */
-const PHOTO_BY_ID = {
-  c1: "https://cdn.pixabay.com/photo/2019/04/14/17/09/americano-4127162_1280.jpg",
-  c2: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  c3: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  c4: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  c5: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  c6: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  c7: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  c8: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  c9: "https://cdn.pixabay.com/photo/2019/04/14/17/09/americano-4127162_1280.jpg",
-  c10: "https://cdn.pixabay.com/photo/2019/04/14/17/09/americano-4127162_1280.jpg",
-  c11: "https://cdn.pixabay.com/photo/2019/04/14/17/09/americano-4127162_1280.jpg",
-  n1: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
-  n2: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
-  n3: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
-  n4: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  n5: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
-  n6: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
-  i1: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  i2: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  i3: "https://cdn.pixabay.com/photo/2017/08/07/22/57/coffee-2608864_1280.jpg",
-  i4: "https://cdn.pixabay.com/photo/2022/06/07/20/52/curry-7249244_1280.jpg",
-  i5: "https://cdn.pixabay.com/photo/2022/06/07/20/52/curry-7249244_1280.jpg",
-  i6: "https://cdn.pixabay.com/photo/2022/06/07/20/52/curry-7249244_1280.jpg",
-  i7: "https://cdn.pixabay.com/photo/2022/02/06/07/18/matcha-latte-6996428_1280.jpg",
-  s1: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
-  s2: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
-  s3: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
-  sp1: "https://cdn.jalan.jp/jalan/img/8/spot/0218/KL/guide000000218528_7.jpg",
-  sp2: "https://cdn.jalan.jp/jalan/img/8/spot/0218/KL/guide000000218528_7.jpg",
-  p1: "https://cdn.pixabay.com/photo/2011/04/29/11/20/spaghetti-7113_1280.jpg",
-  p2: "https://cdn.pixabay.com/photo/2011/04/29/11/20/spaghetti-7113_1280.jpg",
-  p3: "https://cdn.pixabay.com/photo/2011/04/29/11/20/spaghetti-7113_1280.jpg",
-  sa1: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
-  sa2: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
-  m1: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
-  m2: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
-  m3: "https://cdn.pixabay.com/photo/2022/06/07/20/52/curry-7249244_1280.jpg",
-  m4: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
-  m5: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
-  m6: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
-  sd1: "https://cdn.pixabay.com/photo/2021/03/30/13/40/chicken-curry-6136993_1280.jpg",
-  sd2: "https://tb-static.uber.com/prod/image-proc/processed_images/72dc67b9bdc89451b9374493785864f8/783282f6131ef2258e5bcd87c46aa87e.jpeg",
-};
+/* Local per-item product photos live at the paths declared in MENU[].image
+   (see ASSET-CREDITS.txt for sources). Category art is the fallback. */
 const CAT_IMAGE = {
   Coffee: "images/menu/placeholder.png",
   "Non-Coffee": "images/menu/non-coffee.png",
@@ -618,7 +575,8 @@ const CAT_IMAGE = {
   Mains: "images/menu/mains.png",
   Sides: "images/menu/sidedish.png",
 };
-const catImage = (m) => PHOTO_BY_ID[m.id] || CAT_IMAGE[m.cat] || "images/menu/placeholder.png";
+const catImage = (m) =>
+  (m && m.image) || (m && CAT_IMAGE[m.cat]) || "images/menu/placeholder.png";
 const state = {
   q: "",
   cat: "All",
@@ -752,9 +710,8 @@ function renderMenu() {
   document.getElementById("menuGrid").innerHTML = list
     .map((m) => {
       const fav = favs.includes(m.id);
-      const disabledItems = Store.get("disabledItems", []);
-      const unavailable = !servingAvailable(m) || disabledItems.includes(m.id);
-      const tile = `<div class="menu-tile ${TILE[m.cat]}" aria-hidden="true"><img src="${escapeHtml(catImage(m))}" alt="" loading="lazy" decoding="async" onerror="this.src='images/menu/placeholder.png';this.parentElement.classList.add('is-placeholder')"><span class="menu-tile-fallback">${m.emoji}</span></div>`;
+      const unavailable = !servingAvailable(m);
+      const tile = `<div class="menu-tile ${TILE[m.cat]}"><img src="${escapeHtml(catImage(m))}" alt="${escapeHtml(m.name)}" loading="lazy" decoding="async" onerror="this.src='images/menu/placeholder.png';this.parentElement.classList.add('is-placeholder')"><span class="menu-tile-fallback" aria-hidden="true">${m.emoji}</span></div>`;
       const addBtn = unavailable
         ? `<button class="btn btn-blue btn-sm" data-add="${m.id}" disabled aria-disabled="true">Not yet</button>`
         : `<button class="btn btn-blue btn-sm" data-add="${m.id}">Add</button>`;

@@ -276,6 +276,20 @@ section {
   padding: 0.15rem 0.6rem;
   border-radius: 50rem;
 }
+.review-dish:hover {
+  background: var(--blue);
+  color: #fff;
+}
+.review-dish .bi {
+  font-size: 0.75em;
+}
+.review-dish-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+}
 .fav-btn {
   border: 0;
   background: transparent;
@@ -475,14 +489,6 @@ section {
   border-radius: 50%;
   line-height: 1;
 }
-.admin-sidebar .nav-link {
-  color: var(--ink);
-  border-radius: 10px;
-}
-.admin-sidebar .nav-link.active {
-  background: var(--blue);
-  color: #fff;
-}
 .stat-num {
   font-family: "Rhodium Libre", serif;
   font-size: 2.6rem;
@@ -550,11 +556,14 @@ section {
   box-shadow: 0 8px 24px rgba(25, 45, 78, 0.12);
   background: #fbf3e8;
 }
+/* Blog cover images: one sizing rule — the width comes from the card and
+   the height from clamp(), so the aspect-ratio property is omitted (it
+   would be ignored anyway once both width and height are definite, and it
+   only made the cascade ambiguous against .img-cover's height:100%). */
 .blog-cover {
   display: block;
   width: 100%;
   height: clamp(220px, 27vw, 320px);
-  aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: center;
   background: #eee6dc;
@@ -1561,13 +1570,6 @@ a:hover {
 }
 .map-frame {
   border-radius: 8px;
-}
-.admin-sidebar .nav-link {
-  border-radius: 4px;
-}
-.admin-sidebar .nav-link.active {
-  background: #284484;
-  color: #fff;
 }
 .stat-num {
   color: #284484;

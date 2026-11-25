@@ -13,6 +13,7 @@ function cartMarkup() {
     <div class="offcanvas-body d-flex flex-column">
       <div id="cartItems" class="flex-grow-1"></div>
       <div id="cartFooter" class="pt-3 border-top">
+        <div class="d-none mb-2 small" id="lastOrderLine"></div>
         <div class="small text-muted-2 mb-1" id="discountProgress"></div>
         <div class="progress mb-2" style="height:6px"><div class="progress-bar" id="discountProgressBar" style="width:0%;background:var(--blue)"></div></div>
         <div id="undoWrap" class="small mb-2 d-none"><button class="btn btn-link btn-sm p-0" id="undoRemoveBtn" type="button">Undo remove</button></div>
@@ -64,25 +65,89 @@ function cartMarkup() {
     </div>
   </div>
 
-  <div class="modal fade" id="orderDoneModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered"><div class="modal-content text-center p-4">
-      <div class="display-4 text-success"><i class="bi bi-check-circle"></i></div>
-      <h4 class="mt-2">Order received!</h4>
-      <p class="mb-1">Your order number is <span class="code-chip" id="orderNo"></span></p>
-      <p class="small text-muted-2" id="orderDoneMsg"></p>
-      <div class="d-flex gap-2 justify-content-center flex-wrap">
-        <button class="btn btn-outline-blue" id="printReceiptBtn" type="button"><i class="bi bi-printer me-1"></i>Print receipt</button>
-        <button class="btn btn-outline-blue" id="trackOrderBtn" type="button"><i class="bi bi-truck me-1"></i>Track order</button>
-        <button class="btn btn-outline-blue" id="reorderBtn" type="button"><i class="bi bi-arrow-repeat me-1"></i>Reorder</button>
-        <button class="btn btn-blue" data-bs-dismiss="modal">Done</button>
+  <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content p-4">
+      <div class="text-center">
+        <div class="display-4 text-success"><i class="bi bi-check-circle"></i></div>
+        <h4 class="mt-2" id="receiptTitle">Order received!</h4>
+        <p class="mb-1">Your order number is <span class="code-chip" id="orderNo"></span></p>
+        <p class="small text-muted-2" id="orderDoneMsg"></p>
+      </div>
+      <div id="receiptContent" class="border rounded-3 p-3 mt-3"></div>
+      <div class="d-flex gap-2 justify-content-center flex-wrap mt-3">
+        <button class="btn btn-outline-blue btn-sm" id="printReceiptBtn" type="button"><i class="bi bi-printer me-1"></i>Print receipt</button>
+        <button class="btn btn-outline-blue btn-sm" id="downloadReceiptBtn" type="button"><i class="bi bi-download me-1"></i>Download</button>
+        <button class="btn btn-outline-blue btn-sm" id="trackOrderBtn" type="button"><i class="bi bi-truck me-1"></i>Track order</button>
+        <button class="btn btn-outline-blue btn-sm" id="reorderBtn" type="button"><i class="bi bi-arrow-repeat me-1"></i>Reorder</button>
+        <button class="btn btn-blue btn-sm" data-bs-dismiss="modal">Done</button>
       </div>
     </div></div>
-  </div>
-
-  <div class="modal fade" id="receiptModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered"><div class="modal-content p-4" id="receiptContent">
-    </div></div>
   </div>`;
+}
+
+/* Receipt shown immediately after checkout; also re-openable from the cart. */
+let lastShownOrder = null;
+
+function receiptHtml(order) {
+  return `<h4 class="mb-1">Ancestra Cafe — Receipt</h4>
+    <p class="small text-muted-2 mb-3">${new Date(order.date).toLocaleString()} · ${escapeHtml(order.id)}</p>
+    <p class="mb-1"><strong>${escapeHtml(order.name)}</strong> · ${escapeHtml(order.type)} · Pickup: ${escapeHtml(order.pickup || "—")}</p>
+    <hr>
+    ${order.items
+      .map(
+        (i) =>
+          `<div class="d-flex justify-content-between"><span>${i.qty}× ${escapeHtml(i.name)}${i.note ? ` <span class="small text-muted-2">(${escapeHtml(i.note)})</span>` : ""}</span><span>${Peso(i.price * i.qty)}</span></div>`,
+      )
+      .join("")}
+    <hr>
+    <div class="d-flex justify-content-between"><span>Subtotal</span><span>${Peso(order.subtotal)}</span></div>
+    <div class="d-flex justify-content-between text-success"><span>Discount</span><span>-${Peso(order.discount)}</span></div>
+    <div class="d-flex justify-content-between fw-bold"><span>Total</span><span>${Peso(order.total)}</span></div>
+    <p class="small text-muted-2 mt-3 mb-0">Payment at the counter. Thank you!</p>`;
+}
+
+function receiptText(order) {
+  const lines = [
+    "ANCESTRA CAFE — RECEIPT",
+    "========================",
+    `Order: ${order.id}`,
+    `Date: ${new Date(order.date).toLocaleString()}`,
+    `Customer: ${order.name}`,
+    `Order type: ${order.type}`,
+    `Pickup: ${order.pickup || "—"}`,
+    "",
+    "ITEMS",
+    ...order.items.map(
+      (i) =>
+        `${i.qty} x ${i.name} — ${Peso(i.price * i.qty)}${i.note ? ` (${i.note})` : ""}`,
+    ),
+    "",
+    `Subtotal: ${Peso(order.subtotal)}`,
+    `Discount: -${Peso(order.discount)}`,
+    `Total: ${Peso(order.total)}`,
+    "",
+    "Payment is made at the counter. Thank you!",
+  ];
+  return lines.join("\n");
+}
+
+function showReceipt(order, message) {
+  if (!order) return;
+  lastShownOrder = order;
+  const rc = document.getElementById("receiptContent");
+  if (rc) rc.innerHTML = receiptHtml(order);
+  const no = document.getElementById("orderNo");
+  if (no) no.textContent = order.id;
+  const msg = document.getElementById("orderDoneMsg");
+  if (msg) {
+    msg.textContent = message || "";
+    msg.classList.toggle("d-none", !message);
+  }
+  const title = document.getElementById("receiptTitle");
+  if (title) title.textContent = message ? "Order received!" : "Your receipt";
+  const modalEl = document.getElementById("receiptModal");
+  if (modalEl && window.bootstrap)
+    bootstrap.Modal.getOrCreateInstance(modalEl).show();
 }
 
 const Cart = {
@@ -299,7 +364,7 @@ const Cart = {
     const pickup = document.getElementById("coPickup");
     if (pickup) {
       const now = new Date();
-      pickup.innerHTML = `<option value="ASAP">ASAP</option>`;
+      pickup.innerHTML = "";
       for (let i = 1; i <= 8; i++) {
         const t = new Date(now.getTime() + i * 15 * 60000);
         const hh = String(t.getHours()).padStart(2, "0");
@@ -368,27 +433,60 @@ const Cart = {
         w.focus();
         w.print();
       });
+    const dlBtn = document.getElementById("downloadReceiptBtn");
+    if (dlBtn)
+      dlBtn.addEventListener("click", () => {
+        const order = lastShownOrder || Store.get("lastOrder", null);
+        if (!order) return toast("No receipt to download.", "warning");
+        const blob = new Blob([receiptText(order)], {
+          type: "text/plain;charset=utf-8",
+        });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `ancestra-receipt-${order.id}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        toast("Receipt downloaded.");
+      });
     const trackBtn = document.getElementById("trackOrderBtn");
     if (trackBtn) trackBtn.addEventListener("click", () => {
-      const last = Store.get("lastOrder", null);
-      if (!last) return;
-      Store.set("trackOrderId", last.id);
+      const order = lastShownOrder || Store.get("lastOrder", null);
+      if (!order) return;
+      Store.set("trackOrderId", order.id);
       window.location.href = "experience.html#order-tracking";
     });
     const reorderBtn = document.getElementById("reorderBtn");
     if (reorderBtn)
       reorderBtn.addEventListener("click", () => {
-        const last = Store.get("lastOrder", null);
-        if (!last) return toast("No previous order.", "warning");
+        const order = lastShownOrder || Store.get("lastOrder", null);
+        if (!order) return toast("No previous order.", "warning");
         Store.set(
           "cart",
-          last.items.map((i) => ({ ...i, qty: i.qty })),
+          order.items.map((i) => ({ ...i, qty: i.qty })),
         );
         this.render();
         bootstrap.Modal.getInstance(
-          document.getElementById("orderDoneModal"),
+          document.getElementById("receiptModal"),
         )?.hide();
         toast("Items added to cart.", "success");
+      });
+    // Persistent order id: view receipt / track straight from the cart.
+    const footer = document.getElementById("cartFooter");
+    if (footer)
+      footer.addEventListener("click", (e) => {
+        if (e.target.closest("#viewReceiptBtn")) {
+          const last = Store.get("lastOrder", null);
+          if (last) showReceipt(last);
+          else toast("No previous order.", "warning");
+        }
+        if (e.target.closest("#trackLastBtn")) {
+          const last = Store.get("lastOrder", null);
+          if (!last) return toast("No previous order.", "warning");
+          Store.set("trackOrderId", last.id);
+          window.location.href = "experience.html#order-tracking";
+        }
       });
     this.render();
   },
@@ -397,6 +495,22 @@ const Cart = {
     const items = this.items();
     const badge = document.getElementById("cartBadge");
     if (badge) badge.textContent = this.count();
+
+    // Persistent order id line in the cart footer.
+    const lastLine = document.getElementById("lastOrderLine");
+    if (lastLine) {
+      const last = Store.get("lastOrder", null);
+      if (last && last.id) {
+        lastLine.classList.remove("d-none");
+        lastLine.innerHTML = `Last order <span class="code-chip">${escapeHtml(last.id)}</span>
+          <button type="button" class="btn btn-link btn-sm p-0 ms-1" id="viewReceiptBtn">View receipt</button>
+          <button type="button" class="btn btn-link btn-sm p-0 ms-1" id="trackLastBtn">Track</button>`;
+      } else {
+        lastLine.classList.add("d-none");
+        lastLine.innerHTML = "";
+      }
+    }
+
     const list = document.getElementById("cartItems");
     if (!list) return;
 
@@ -501,7 +615,7 @@ const Cart = {
       })),
       pickup: document.getElementById("coPickup")
         ? document.getElementById("coPickup").value
-        : "ASAP",
+        : "",
       subtotal: this.subtotal(),
       discount: info.discount || 0,
       voucher: info.ok ? info.voucher.code : null,
@@ -559,34 +673,30 @@ const Cart = {
     Store.set("lastOrder", order);
     Store.set("appliedVoucher", null);
     this.save([]);
-    // build receipt
-    const rc = document.getElementById("receiptContent");
-    if (rc) {
-      rc.innerHTML = `<h4 class="mb-1">Ancestra Cafe — Receipt</h4>
-        <p class="small text-muted-2 mb-3">${new Date(order.date).toLocaleString()} · ${order.id}</p>
-        <p class="mb-1"><strong>${escapeHtml(order.name)}</strong> · ${escapeHtml(order.type)} · Pickup: ${escapeHtml(order.pickup)}</p>
-        <hr>
-        ${order.items
-          .map(
-            (i) =>
-              `<div class="d-flex justify-content-between"><span>${i.qty}× ${escapeHtml(i.name)}${i.note ? ` <span class="small text-muted-2">(${escapeHtml(i.note)})</span>` : ""}</span><span>${Peso(i.price * i.qty)}</span></div>`,
-          )
-          .join("")}
-        <hr>
-        <div class="d-flex justify-content-between"><span>Subtotal</span><span>${Peso(order.subtotal)}</span></div>
-        <div class="d-flex justify-content-between text-success"><span>Discount</span><span>-${Peso(order.discount)}</span></div>
-        <div class="d-flex justify-content-between fw-bold"><span>Total</span><span>${Peso(order.total)}</span></div>
-        <p class="small text-muted-2 mt-3 mb-0">Payment at the counter. Thank you!</p>`;
-    }
     form.classList.remove("was-validated");
     form.reset();
     bootstrap.Modal.getInstance(
       document.getElementById("checkoutModal"),
-    ).hide();
-    document.getElementById("orderNo").textContent = order.id;
+    )?.hide();
     stampMsg += ` Estimated wait: ~${waitMin} min.`;
-    document.getElementById("orderDoneMsg").textContent = stampMsg;
-    new bootstrap.Modal(document.getElementById("orderDoneModal")).show();
+    // The receipt — with the order number — appears immediately after ordering.
+    // Wait for the checkout modal to finish hiding so Bootstrap doesn't drop
+    // the backdrop (with a timeout fallback if the event never fires).
+    const checkoutEl = document.getElementById("checkoutModal");
+    let receiptShown = false;
+    const openReceipt = () => {
+      if (receiptShown) return;
+      receiptShown = true;
+      showReceipt(order, stampMsg);
+    };
+    if (checkoutEl && window.bootstrap) {
+      checkoutEl.addEventListener("hidden.bs.modal", openReceipt, {
+        once: true,
+      });
+      setTimeout(openReceipt, 700);
+    } else {
+      openReceipt();
+    }
     if (typeof window.onOrderPlaced === "function") window.onOrderPlaced();
   },
 };

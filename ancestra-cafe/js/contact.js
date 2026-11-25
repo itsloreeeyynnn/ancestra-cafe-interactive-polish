@@ -1,4 +1,4 @@
-/* Interactive directions, open status, FAQ helpers, gift/catering, notifications */
+/* Interactive directions, open/closed status, contact form */
 const CAFE_DESTINATION =
   "Ancestra Cafe, 311 General Ortega St., Poblacion, Argao, Cebu, Philippines";
 document.addEventListener("DOMContentLoaded", () => {
@@ -40,34 +40,4 @@ document.addEventListener("DOMContentLoaded", () => {
     f.classList.remove("was-validated");
     toast("Message sent. For inquiries, email contact@ancestracafe.ph.", "info");
   });
-
-  // gift/catering calculator
-  function updateEstimate() {
-    const qty = Number(document.getElementById("giftQty")?.value) || 1;
-    const val = Number(document.getElementById("giftValue")?.value) || 0;
-    const el = document.getElementById("giftEstimate");
-    if (el) el.textContent = Peso(qty * val);
-  }
-  ["giftQty", "giftValue"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener("input", updateEstimate);
-  });
-  updateEstimate();
-
-  const giftForm = document.getElementById("giftForm");
-  if (giftForm)
-    giftForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      toast("Inquiry sent. We'll be in touch shortly.", "success");
-      giftForm.reset();
-      updateEstimate();
-    });
-
-  const notifBtn = document.getElementById("enableNotifBtn");
-  if (notifBtn)
-    notifBtn.addEventListener("click", async () => {
-      if (!("Notification" in window)) return toast("Notifications not supported.", "warning");
-      const perm = await Notification.requestPermission();
-      toast(perm === "granted" ? "Notifications enabled." : "Permission not granted.", perm === "granted" ? "success" : "warning");
-    });
 });

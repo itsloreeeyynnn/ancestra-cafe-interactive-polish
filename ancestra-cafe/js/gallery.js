@@ -360,6 +360,33 @@ function applyVideoFilter() {
   video.style.filter = css === "none" ? "" : css;
 }
 
+/* The stage box must always equal the active media element's box exactly —
+   otherwise the black stage shows as a band around the video or composite.
+   The stage's aspect-ratio is derived from real intrinsic dimensions:
+   the composited canvas when a strip/photo is shown, the camera frame while
+   live, and the video's rendered box before metadata arrives. */
+function syncBoothStage() {
+  const stage = document.getElementById("boothStage");
+  if (!stage) return;
+  const video = document.getElementById("boothVideo");
+  const canvas = document.getElementById("boothCanvas");
+  let w = 0;
+  let h = 0;
+  if (canvas && !canvas.classList.contains("d-none") && canvas.width && canvas.height) {
+    w = canvas.width;
+    h = canvas.height;
+  } else if (video && video.videoWidth && video.videoHeight) {
+    w = video.videoWidth;
+    h = video.videoHeight;
+  } else if (video && video.offsetWidth && video.offsetHeight) {
+    // Before metadata (or with no camera): use the video's rendered box.
+    w = video.offsetWidth;
+    h = video.offsetHeight;
+  }
+  if (w > 0 && h > 0) stage.style.aspectRatio = `${w} / ${h}`;
+  if (video && video.videoWidth && video.videoHeight) updateOverlay();
+}
+
 function updateOverlay() {
   const video = document.getElementById("boothVideo");
   const overlay = document.getElementById("boothOverlay");
@@ -682,6 +709,7 @@ function backToEdit() {
   if (video) video.classList.remove("d-none");
   if (canvas) canvas.classList.add("d-none");
   if (overlay) overlay.classList.remove("d-none");
+  syncBoothStage();
   const useBtn = document.getElementById("usePhotoBtn");
   const dlBtn = document.getElementById("downloadBtn");
   if (useBtn) useBtn.disabled = true;
@@ -711,6 +739,7 @@ async function buildStrip() {
   if (overlay) overlay.classList.add("d-none");
   if (canvas) canvas.classList.remove("d-none");
   await renderComposite();
+  syncBoothStage();
   stripFinalized = true;
   const wrap = document.getElementById("stripPreviewWrap");
   if (wrap) wrap.classList.add("d-none");
@@ -733,6 +762,7 @@ async function buildSingle() {
   if (overlay) overlay.classList.add("d-none");
   if (canvas) canvas.classList.remove("d-none");
   await renderComposite();
+  syncBoothStage();
   stripFinalized = true;
   const useBtn = document.getElementById("usePhotoBtn");
   const dlBtn = document.getElementById("downloadBtn");
@@ -755,6 +785,7 @@ function startOverBooth() {
   if (video) video.classList.remove("d-none");
   if (canvas) canvas.classList.add("d-none");
   if (overlay) overlay.classList.remove("d-none");
+  syncBoothStage();
   updateOverlay();
   applyVideoFilter();
   renderSlots();
@@ -892,6 +923,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const pc = document.getElementById("photoCaption");
       if (bn && pn) bn.value = pn.value;
       if (bc && pc) bc.value = pc.value;
+      syncBoothStage();
       startBoothCamera();
     });
     modalEl.addEventListener("hidden.bs.modal", () => {
@@ -907,6 +939,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (buildBtn) buildBtn.addEventListener("click", buildStrip);
   const editBtn = document.getElementById("editBtn");
   if (editBtn) editBtn.addEventListener("click", backToEdit);
+
+  // Keep the stage box locked to the live video's real dimensions.
+  const boothVideo = document.getElementById("boothVideo");
+  if (boothVideo) {
+    boothVideo.addEventListener("loadedmetadata", syncBoothStage);
+    boothVideo.addEventListener("resize", syncBoothStage);
+  }
+  window.addEventListener("resize", syncBoothStage);
 
   const useBtn = document.getElementById("usePhotoBtn");
   if (useBtn) {

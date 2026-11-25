@@ -44,10 +44,10 @@
           <div class="modal-body">
             <div class="row g-3">
               <div class="col-md-7">
-                <div class="booth-stage position-relative rounded overflow-hidden" style="background:#000;min-height:260px">
+                <div class="booth-stage position-relative rounded overflow-hidden" id="boothStage" style="background:#000;aspect-ratio:4 / 3">
                   <video id="boothVideo" autoplay playsinline muted class="w-100 d-block" style="transform:scaleX(-1)"></video>
                   <canvas id="boothOverlay" class="position-absolute top-0 start-0 w-100 h-100" style="pointer-events:none;transform:scaleX(-1)"></canvas>
-                  <canvas id="boothCanvas" class="w-100 d-none"></canvas>
+                  <canvas id="boothCanvas" class="w-100 d-none" style="display:block;height:auto"></canvas>
                   <div id="boothCountdown" class="d-none position-absolute top-50 start-50 translate-middle text-white fw-bold" style="font-size:4rem;text-shadow:0 2px 8px rgba(0,0,0,.6);pointer-events:none">3</div>
                 </div>
                 <div class="d-flex gap-2 mt-2 justify-content-center">

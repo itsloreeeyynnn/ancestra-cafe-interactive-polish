@@ -96,6 +96,23 @@ function getFilteredReviews() {
   return list;
 }
 
+/* A dish mentioned in a review is shown as a linked pill with the menu
+   photo, so guests can jump straight to that item on the menu page. */
+function dishPill(name) {
+  const item = (typeof MENU !== "undefined" ? MENU : []).find(
+    (m) => m.name.toLowerCase() === String(name).toLowerCase(),
+  );
+  const label = escapeHtml(name);
+  if (!item || typeof catImage !== "function") {
+    return `<span class="tag-pill review-dish my-2 d-inline-block">${label}</span>`;
+  }
+  return `<a class="tag-pill review-dish my-2 d-inline-flex align-items-center gap-2 text-decoration-none" href="menu.html" title="View ${label} on the menu">
+    <img src="${escapeHtml(catImage(item))}" alt="" width="22" height="22" loading="lazy" decoding="async" class="review-dish-thumb" onerror="this.style.display='none'">
+    <span>${label}</span>
+    <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+  </a>`;
+}
+
 function renderReviews() {
   const all = getReviews().filter((r) => !r.hidden);
   const avg = all.length ? all.reduce((s, r) => s + r.rating, 0) / all.length : 0;
@@ -123,7 +140,7 @@ function renderReviews() {
         <div><strong>${escapeHtml(r.name)}</strong> ${isVerifiedPurchase(r.name) ? '<span class="badge text-bg-success small">Verified purchase</span>' : ""} <span class="stars ms-2">${starString(r.rating)}</span></div>
         <span class="small text-muted-2">${new Date(r.date).toLocaleDateString("en-PH", { year: "numeric", month: "short", day: "numeric" })}</span>
       </div>
-      ${r.dish ? `<span class="tag-pill my-2 d-inline-block">${escapeHtml(r.dish)}</span>` : ""}
+      ${r.dish ? dishPill(r.dish) : ""}
       <p class="mb-0 mt-1">${escapeHtml(r.text)}</p>
       ${r.photo ? `<button type="button" class="review-photo-btn p-0 border-0 bg-transparent mt-2" data-photo="${r.id}" aria-label="View photo from ${escapeHtml(r.name)}"><img src="${r.photo}" alt="Photo from ${escapeHtml(r.name)}" style="width:100%;max-height:220px;object-fit:cover;border-radius:8px;border:1px solid #d7cbbd;cursor:zoom-in"></button>` : ""}
       ${r.reply ? `<div class="card-soft p-2 mt-2 small"><strong>Café:</strong> ${escapeHtml(r.reply)}</div>` : ""}

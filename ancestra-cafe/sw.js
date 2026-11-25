@@ -1,4 +1,4 @@
-const CACHE = "ancestra-header-v4";
+const CACHE = "ancestra-header-v5";
 const ASSETS = [
   "./",
   "./index.html",
@@ -9,7 +9,6 @@ const ASSETS = [
   "./blog.html",
   "./contact.html",
   "./faq.html",
-  "./admin.html",
   "./css/style.css",
   "./js/main.js",
   "./js/home.js",
@@ -23,7 +22,6 @@ const ASSETS = [
   "./js/gallery.js",
   "./js/contact.js",
   "./js/blog.js",
-  "./js/admin.js",
   "./manifest.json",
   "./images/favicon.jpg"
 ];

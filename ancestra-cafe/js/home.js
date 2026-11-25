@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   grid.innerHTML = highlights
     .map(
       (m) =>
-        `<div class="col"><article class="card-soft hover-lift h-100 overflow-hidden"><div class="menu-tile ${TILE[m.cat]}" aria-hidden="true"><img src="${escapeHtml(CAT_IMAGE ? CAT_IMAGE[m.cat] : m.image)}" alt="" loading="lazy" decoding="async" onerror="this.src='images/menu/placeholder.png';this.parentElement.classList.add('is-placeholder')"><span class="menu-tile-fallback">${m.emoji}</span></div><div class="p-3"><h3 class="h5 mb-1">${escapeHtml(m.name)}</h3><p class="small text-muted-2">${escapeHtml(m.desc)}</p><div class="d-flex justify-content-between align-items-center"><span class="price">${Peso(m.price)}</span><button class="btn btn-blue btn-sm" data-add="${m.id}">Add</button></div></div></article></div>`,
+        `<div class="col"><article class="card-soft hover-lift h-100 overflow-hidden"><div class="menu-tile ${TILE[m.cat]}"><img src="${escapeHtml(catImage(m))}" alt="${escapeHtml(m.name)}" loading="lazy" decoding="async" onerror="this.src='images/menu/placeholder.png';this.parentElement.classList.add('is-placeholder')"><span class="menu-tile-fallback" aria-hidden="true">${m.emoji}</span></div><div class="p-3"><h3 class="h5 mb-1">${escapeHtml(m.name)}</h3><p class="small text-muted-2">${escapeHtml(m.desc)}</p><div class="d-flex justify-content-between align-items-center"><span class="price">${Peso(m.price)}</span><button class="btn btn-blue btn-sm" data-add="${m.id}">Add</button></div></div></article></div>`,
     )
     .join("");
   grid.addEventListener("click", (e) => {
